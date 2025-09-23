@@ -1,75 +1,78 @@
-# Nuxt Minimal Starter
+# Мотив — лендинг-конструктор тарифа (Nuxt 4, Vue 3)
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+> SPA для привлечения пользователей: интерактивный конфигуратор тарифа, воронка подключения SIM. Проект ориентирован на конверсию в заказ и простую донастройку контента.
 
-## Setup
+- **Стек**: Nuxt 4 (Vue 3), Vite, TypeScript, SCSS, Reka UI, nuxt-swiper, @vueuse/core
+- **Режим**: client-only SPA (`ssr: false`), готов к статическому хостингу
+- **Цель**: повышение конверсии за счёт наглядного выбора тарифа, региона и доп. опций
 
-Make sure to install dependencies:
+## Быстрый старт
 
 ```bash
-# npm
+# Требования: Node >= 18
+
+# Установка
 npm install
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+# Дев-сервер (http://localhost:3000)
 npm run dev
 
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
+# Сборка продакшн
 npm run build
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
+# Локальный предпросмотр сборки
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Основные возможности
+
+- **hero-блок с видео-слайдером**: `<swiper-container>` с кастомными кнопками навигации
+- **Выбор региона**: выпадающий список со списком регионов РФ (`app/utils/regions.ts`)
+- **Конфигуратор тарифа**:
+  - Дискретные слайдеры Reka UI для трафика (Гб, включая «безлимит») и минут
+  - Мгновенная индикация выбранного значения и эмит обновлений
+- **Доп. предложения**: чекбоксы для включаемых опций (влияют на итоговую стоимость)
+- **Подсказки по воронке**: блок «Как получить SIM‑карту» со шагами и иллюстрациями
+
+## Структура проекта
+
+```
+app/
+  app.vue
+  assets/
+    scss/            # базовые стили, шрифты, переменные
+  components/
+    hero/Hero.vue    # видео-слайдер с управлением
+    form/
+      FormWrapper.vue    # сборка конфигуратора
+      RegionDropdown.vue # выбор региона
+      InfoBlock.vue      # шаги воронки подключения
+      DopOffers.vue      # доп. предложения
+    common/MySlider.vue  # обёртка над Reka UI Slider
+  pages/
+    index.vue        # композиция хедера, героя и формы
+  utils/
+    regions.ts       # данные по регионам
+nuxt.config.ts       # модули, глобальные стили, SPA-режим
+```
+
+## Используемые модули и библиотеки
+
+- `reka-ui/nuxt`: UI-примитивы (SliderRoot/Thumb/Track/Range)
+- `nuxt-swiper`: интеграция Swiper Web Components для слайдера
+- `@vueuse/core`: набор полезных композиционных утилит (подключён, используйте по мере надобности)
+- `sass-embedded`: быстрый и совместимый компилятор SCSS
+
+## Конфигурация Nuxt
+
+- `nuxt.config.ts`:
+  - `ssr: false` — приложение работает как SPA
+  - `css: ['~/assets/scss/main.scss']` — подключение глобальных стилей
+  - `modules: ['reka-ui/nuxt', 'nuxt-swiper']`
+  - `components: false` — импорт компонентов явный
+
+## Деплой
+
+- Режим SPA: подойдёт любой статический хостинг (Vercel/Netlify/Nginx и т.д.)
+- Рекомендуемый пайплайн: `npm run preview`
+
