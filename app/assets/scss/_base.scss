@@ -1,0 +1,144 @@
+body {
+	position: relative;
+	font-family: 'Montserrat','Arial', sans-serif;
+	background-color: #fff;
+}
+
+.main {
+	background-color: #F7F7F7;
+}
+.container {
+	margin: 0 auto;
+	max-width: 1444px;
+	width: 100%;
+	padding: 0 50px;
+
+	@media screen and (max-width: 1024px) {
+		padding: 0 40px;
+	}
+
+	@media screen and (max-width: 480px) {
+		padding: 0 15px;
+	}
+}
+
+.btn-reset {
+	border: none;
+	padding: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+.list-reset {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.home {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.section__blogs {
+	max-width: 1470px;
+	background-color: var(--c-dark-bg);
+	padding: 100px 80px 0;
+	width: 100%;
+	display: flex;
+	row-gap: 40px;
+	flex-direction: column;
+
+	@media screen and (max-width: 1200px) {
+		padding: 80px 40px 0;
+	}
+
+	@media screen and (max-width: 640px) {
+		padding: 60px 20px 0;
+	}
+}
+.title {
+	color:  #181818;
+	text-align: center;
+	font-family: Helvetica;
+	font-size: 32px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 40px; 
+}
+
+.section {
+	padding-top: 30px;
+	padding-bottom: 30px;
+	min-height: 60vh;
+}
+
+.service__wrapper {
+	padding: 100px 80px 0;
+	min-height: 738px;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+
+	@media screen and (max-width: 1200px) {
+		padding: 80px 40px 0;
+	}
+
+	@media screen and (max-width: 640px) {
+		padding: 80px 20px 0;
+	}
+
+	@media screen and (max-width: 480px) {
+		padding: 60px 10px 0;
+	}
+}
+
+.wrapper {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	padding-right: 0;
+}
+.service {
+	padding: 0;
+
+	&__content {
+		padding: 80px;
+
+		@media screen and (max-width: 1200px) {
+			padding: 40px;
+		}
+
+		@media screen and (max-width: 640px) {
+			padding: 20px;
+		}
+	}
+}
+
+/* Reusable custom scrollbar (WebKit + Firefox) */
+.scrollbar {
+	/* Firefox */
+	scrollbar-width: thin;
+	scrollbar-color: #ff7a00 #F8F9FA;
+}
+
+.scrollbar::-webkit-scrollbar {
+	width: 1px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+	background: #f6f5f5;
+	border-radius: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+	background-color: #ff7a00;
+	border-radius: 8px;
+	border: 1px solid #f6f5f5; /* makes the thumb visually thinner than the track */
+	background-clip: padding-box;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+	background-color: #ff6a00;
+}
