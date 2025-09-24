@@ -1,19 +1,24 @@
 <script lang="ts" setup>
+import Accordion from '~/components/common/Accordion.vue'
+import Footer from '~/components/footer/Footer.vue'
 import FormWrapper from '~/components/form/FormWrapper.vue'
 import Header from '~/components/header/Header.vue'
 import Hero from '~/components/hero/Hero.vue'
 </script>
 
 <template>
-  <Header />
-  <Hero />
-  <div class="home__wrapper">
+  <main class="main home__wrapper">
+    <Hero />
     <FormWrapper />
-  </div>
+    <Accordion />
+  </main>
 </template>
 
 <style lang="scss" scoped>
 .home__wrapper {
-  padding: 100px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  padding-bottom: 100px;
 }
 </style>

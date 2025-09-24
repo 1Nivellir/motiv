@@ -1,15 +1,37 @@
 <script lang="ts" setup>
-import MySlider from '~/components/common/MySlider.vue'
-import regions from '~/utils/regions'
+import MySlider from '@/components/common/MySlider.vue'
+import { useCartStore } from '@/stores/cart'
+import { MINUTES_MARKS, TRAFFIC_MARKS } from '@/utils/form-data'
+import regions from '@/utils/regions'
+import InfoBlock from '../order/InfoBlock.vue'
+import OrderByWrapper from '../order/OrderByWrapper.vue'
 import DopOffers from './DopOffers.vue'
-import InfoBlock from './InfoBlock.vue'
 import RegionDropdown from './RegionDropdown.vue'
-const marks = [0, 64, 128, 256, 512, Number.POSITIVE_INFINITY]
-const marks2 = [0, 50, 100, 250, 500, 1000]
-const checkedDopOffers = ref(false)
-const checkedDopOffers2 = ref(false)
-const whenChangeMarks = (value: number) => {
-  console.log(value)
+
+const cartStore = useCartStore()
+const unlimitedCallsWithinTheNetwork = ref(false)
+const everywhereFeelsLikeHome = ref(false)
+const traffic = ref<number>(TRAFFIC_MARKS[4] as number)
+const minutes = ref<number>(MINUTES_MARKS[3] as number)
+
+const whenChangeTariff = (value: number) => {
+  traffic.value = value
+}
+
+const whenChangeMinutes = (value: number) => {
+  minutes.value = value
+}
+
+const whenClickAddCart = () => {
+  const body = {
+    traffic: traffic.value,
+    minutes: minutes.value,
+    unlimitedCallsWithinTheNetwork: unlimitedCallsWithinTheNetwork.value,
+    everywhereFeelsLikeHome: everywhereFeelsLikeHome.value,
+    count: 1,
+    price: 500,
+  }
+  cartStore.setCart(body)
 }
 </script>
 
@@ -17,13 +39,23 @@ const whenChangeMarks = (value: number) => {
   <div class="form container">
     <div class="form__left">
       <RegionDropdown :regions="regions()" />
-      <MySlider :marks="marks" text="Гб" @update:modelValue="whenChangeMarks">
+      <MySlider
+        :start-index="4"
+        :marks="TRAFFIC_MARKS"
+        text="Гб"
+        @update:model-value="whenChangeTariff"
+      >
         <template #icon>
           <img src="/svg/traffic.svg" alt="traffic" />
         </template>
       </MySlider>
 
-      <MySlider :marks="marks2" text="минут">
+      <MySlider
+        :start-index="3"
+        :marks="MINUTES_MARKS"
+        text="минут"
+        @update:model-value="whenChangeMinutes"
+      >
         <template #icon>
           <img src="/svg/mins.svg" alt="mins" />
         </template>
@@ -34,7 +66,7 @@ const whenChangeMarks = (value: number) => {
           textHeader="Безлимитные звонки внутри сети"
           textSubheader="Звони на Мотив без ограничений"
           offer="0 ₽/мес"
-          v-model:model-value="checkedDopOffers"
+          v-model:model-value="unlimitedCallsWithinTheNetwork"
           style="margin-bottom: 4px"
         />
 
@@ -42,7 +74,7 @@ const whenChangeMarks = (value: number) => {
           textHeader="Везде как дома"
           textSubheader="Расход пакет Гб, оплаченный в рамках абонентской платы"
           offer="50 ₽/мес"
-          v-model:model-value="checkedDopOffers2"
+          v-model:model-value="everywhereFeelsLikeHome"
         />
       </div>
       <div class="price_wrapper">
@@ -51,7 +83,11 @@ const whenChangeMarks = (value: number) => {
           >Настроить тариф можно будет в приложении Мотив</span
         >
         <div class="price_wrapper__button-wrapper">
-          <button class="price_wrapper__button btn-reset">
+          <button
+            v-if="cartStore.getCart === null"
+            @click="whenClickAddCart"
+            class="price_wrapper__button btn-reset"
+          >
             в корзину
             <img
               class="price_wrapper__button-icon"
@@ -59,10 +95,23 @@ const whenChangeMarks = (value: number) => {
               alt="cart"
             />
           </button>
+          <button
+            v-else
+            @click="cartStore.clearCart"
+            class="price_wrapper__button btn-reset price_wrapper__button-cart"
+          >
+            в корзине
+            <img
+              class="price_wrapper__button-icon"
+              src="/svg/trash.svg"
+              alt="cart"
+            />
+          </button>
         </div>
       </div>
     </div>
-    <InfoBlock />
+    <InfoBlock v-if="cartStore.getCart === null" />
+    <OrderByWrapper v-else />
   </div>
 </template>
 
@@ -108,6 +157,13 @@ const whenChangeMarks = (value: number) => {
     line-height: 24px; /* 171.429% */
     letter-spacing: 0.56px;
     text-transform: uppercase;
+
+    &-cart {
+      outline: 1px solid #e2e2e2;
+
+      background: #f6f5f5;
+      color: #000;
+    }
 
     &-icon {
       position: absolute;

@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-const cityUser = ref('Екатеринбург')
+import { useCartStore } from '@/stores/cart'
+
+const cartStore = useCartStore()
 const inputValue = ref('')
 const toggleState = ref(false)
 const cities = [
@@ -37,7 +39,7 @@ const handleToggle = (e: Event) => {
 }
 
 const whenChangeCity = (city: string) => {
-  cityUser.value = city
+  cartStore.setUserLocation(city)
   toggleState.value = false
 }
 </script>
@@ -49,7 +51,7 @@ const whenChangeCity = (city: string) => {
 
       <div class="city-dropdown" @click="handleToggle" id="wrapper">
         <img src="/svg/map-marker.svg" alt="map-marker" />
-        <span class="city-dropdown__text">{{ cityUser }}</span>
+        <span class="city-dropdown__text">{{ cartStore.getUserLocation }}</span>
         <img src="/svg/chevron.svg" alt="chevron" />
 
         <div class="city-dropdown__menu" v-if="toggleState" @click.stop>

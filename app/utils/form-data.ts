@@ -1,0 +1,2 @@
+export const TRAFFIC_MARKS = [0, 64, 128, 256, 512, Number.POSITIVE_INFINITY]
+export const MINUTES_MARKS = [0, 50, 100, 250, 500, 1000]

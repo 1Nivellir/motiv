@@ -3,6 +3,7 @@ import { SliderRange, SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { computed, ref, type VNode } from 'vue'
 
 const props = defineProps<{
+  startIndex: number
   marks: number[]
   text: string
   icon?: VNode
@@ -12,12 +13,10 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: number): void
 }>()
 
-// Дискретные значения, соответствующие макету
-// const marks = [0, 64, 128, 256, 512, Number.POSITIVE_INFINITY]
 const maxIndex = props.marks.length - 1
 
 // Храним индекс шага (Slider из reka-ui ожидает массив чисел)
-const stepIndex = ref<number[]>([2])
+const stepIndex = ref<number[]>([props.startIndex])
 
 const currentLabel = computed(() => {
   const index = stepIndex.value[0] ?? 0
@@ -39,7 +38,7 @@ const setIndex = (index: number) => {
       {{ currentLabel }}
     </div>
     <SliderRoot
-      v-model="stepIndex"
+      v-model:model-value="stepIndex"
       class="SliderRoot"
       :max="maxIndex"
       :default-value="marks"

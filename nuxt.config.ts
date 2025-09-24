@@ -5,6 +5,13 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   components: false,
   ssr: false,
-  css: ['~/assets/scss/main.scss'],
-  modules: ['reka-ui/nuxt', 'nuxt-swiper'],
+  alias: {
+    '@': '../app',
+    '~': '../'
+  },
+  css: ['@/assets/scss/main.scss'],
+  modules: ['reka-ui/nuxt', 'nuxt-swiper', '@pinia/nuxt', 'vue-yandex-maps/nuxt'],
+  yandexMaps: {
+    apikey: 'd56b21d6-4144-4697-a320-e1c814a911b4',
+  },
 })

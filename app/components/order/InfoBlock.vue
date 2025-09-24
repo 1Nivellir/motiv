@@ -59,7 +59,8 @@ const steps: StepItem[] = [
 <style lang="scss" scoped>
 .info {
   padding-left: 72px;
-  max-width: 640px;
+
+  max-width: 712px;
 
   border-left: 0.7px solid #e2e2e2;
 
