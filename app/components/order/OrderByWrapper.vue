@@ -15,9 +15,12 @@ const setStepsUser = (value: number) => {
   <div class="order">
     <Cart />
     <PhoneBuyer @set-step-phone="setStepsUser" />
-    <MethodOfObtaining />
-    <PaymentMethod />
-    <Button>Оплатить 1550 ₽ </Button>
+    <MethodOfObtaining
+      v-if="stepsUser.includes(1)"
+      @set-step-method="setStepsUser"
+    />
+    <PaymentMethod v-if="stepsUser.includes(2)" />
+    <Button v-if="stepsUser.includes(2)">Оплатить 1550 ₽ </Button>
   </div>
 </template>
 

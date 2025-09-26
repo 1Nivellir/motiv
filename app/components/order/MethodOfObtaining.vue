@@ -3,6 +3,10 @@ import { useCartStore } from '@/stores/cart'
 import Map from './Map.vue'
 const activeMethod = ref<'pickup' | 'delivery'>('pickup')
 const cartStore = useCartStore()
+
+const emit = defineEmits<{
+  (e: 'setStepMethod', value: number): void
+}>()
 </script>
 
 <template>
@@ -65,7 +69,10 @@ const cartStore = useCartStore()
           <span> <strong>18-20 сентября, </strong> стоимость 258 ₽ </span></span
         >
 
-        <button class="method-of-obtaining__map-title-text-button btn-reset">
+        <button
+          class="method-of-obtaining__map-title-text-button btn-reset"
+          @click="emit('setStepMethod', 2)"
+        >
           <img src="/svg/map-marker.svg" alt="edit" />Изменить
         </button>
       </div>
