@@ -1,9 +1,7 @@
 <script lang="ts" setup>
-import Accordion from '~/components/common/Accordion.vue'
-import Footer from '~/components/footer/Footer.vue'
-import FormWrapper from '~/components/form/FormWrapper.vue'
-import Header from '~/components/header/Header.vue'
-import Hero from '~/components/hero/Hero.vue'
+import Accordion from '@/components/common/Accordion.vue'
+import FormWrapper from '@/components/form/FormWrapper.vue'
+import Hero from '@/components/hero/Hero.vue'
 </script>
 
 <template>
@@ -20,5 +18,10 @@ import Hero from '~/components/hero/Hero.vue'
   flex-direction: column;
   gap: 100px;
   padding-bottom: 100px;
+
+  @media screen and (max-width: 992px) {
+    gap: 50px;
+    padding-bottom: 50px;
+  }
 }
 </style>

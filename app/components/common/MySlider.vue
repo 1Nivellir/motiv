@@ -43,6 +43,7 @@ const setIndex = (index: number) => {
       :max="maxIndex"
       :default-value="marks"
       :step="1"
+      :min-steps-between-thumbs="1"
     >
       <SliderTrack class="SliderTrack">
         <SliderRange class="SliderRange" />
@@ -70,6 +71,9 @@ const setIndex = (index: number) => {
 .TrafficSlider {
   width: 100%;
   max-width: 660px;
+  @media screen and (max-width: 992px) {
+    max-width: 100%;
+  }
 }
 
 .CurrentValue {
@@ -159,6 +163,10 @@ const setIndex = (index: number) => {
   margin-top: 16px;
   padding: 0;
   list-style: none;
+
+  @media screen and (max-width: 992px) {
+    max-width: 100%;
+  }
 }
 
 .Mark {
@@ -166,6 +174,10 @@ const setIndex = (index: number) => {
   color: #8c8c8c;
   cursor: pointer;
   user-select: none;
+
+  @media screen and (max-width: 400px) {
+    font-size: 12px;
+  }
 }
 .Mark:first-child {
   margin-right: calc(100% - 80px);
@@ -192,6 +204,13 @@ const setIndex = (index: number) => {
   position: absolute;
   top: 0;
   left: calc(78% - 8.8px);
+
+  @media screen and (max-width: 700px) {
+    left: calc(78% - 12px);
+  }
+  @media screen and (max-width: 550px) {
+    left: calc(77% - 12px);
+  }
 }
 .Mark:nth-child(6) {
   position: absolute;

@@ -59,10 +59,16 @@ const steps: StepItem[] = [
 <style lang="scss" scoped>
 .info {
   padding-left: 72px;
-
+  width: 100%;
   max-width: 712px;
 
   border-left: 0.7px solid #e2e2e2;
+
+  @media screen and (max-width: 992px) {
+    border-left: none;
+    padding-left: 0;
+    max-width: 100%;
+  }
 
   &__item-header {
     display: flex;

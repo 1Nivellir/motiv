@@ -36,7 +36,7 @@ const whenClickAddCart = () => {
 </script>
 
 <template>
-  <div class="form container">
+  <div class="form container" id="form-order">
     <div class="form__left">
       <RegionDropdown :regions="regions()" />
       <MySlider
@@ -109,6 +109,35 @@ const whenClickAddCart = () => {
           </button>
         </div>
       </div>
+      <div class="mp-wrapper">
+        <span class="mp-text">или маркетплейсах</span>
+        <div class="mp-links">
+          <a
+            class="mp-link"
+            href="http://"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="/svg/ozon.svg" alt="Озон маркетплейс" />
+          </a>
+          <a
+            class="mp-link"
+            href="http://"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="/svg/wb.svg" alt="Озон маркетплейс" />
+          </a>
+          <a
+            class="mp-link"
+            href="http://"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="/svg/ymarket.svg" alt="Озон маркетплейс" />
+          </a>
+        </div>
+      </div>
     </div>
     <InfoBlock v-if="cartStore.getCart === null" />
     <OrderByWrapper v-else />
@@ -116,6 +145,40 @@ const whenClickAddCart = () => {
 </template>
 
 <style lang="scss" scoped>
+.mp-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.mp-link {
+  border-radius: 14px;
+  padding: 13px 10px;
+
+  display: flex;
+  justify-content: center;
+  border: 0.7px solid #e2e2e2;
+  background: #fff;
+
+  & img {
+    width: 92px;
+    height: 30px;
+  }
+}
+.mp-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.mp-text {
+  display: block;
+  text-align: center;
+  color: #000;
+  text-align: center;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 141.176% */
+}
 .price_wrapper {
   padding-top: 12px;
   display: flex;
@@ -178,8 +241,14 @@ const whenClickAddCart = () => {
 .form {
   display: flex;
   gap: 72px;
+
+  @media screen and (max-width: 992px) {
+    flex-direction: column;
+    gap: 50px;
+  }
 }
 .form__left {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 32px;

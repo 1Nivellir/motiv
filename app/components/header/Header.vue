@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { useCartStore } from '@/stores/cart'
-
 const cartStore = useCartStore()
 const inputValue = ref('')
 const toggleState = ref(false)
+
 const cities = [
   'Екатеринбург',
   'Москва',
@@ -47,7 +47,7 @@ const whenChangeCity = (city: string) => {
 <template>
   <header>
     <div class="wrapper">
-      <img src="/img/logo.png" alt="logo" />
+      <NuxtLink to="/"> <img src="/img/logo.png" alt="logo" /></NuxtLink>
 
       <div class="city-dropdown" @click="handleToggle" id="wrapper">
         <img src="/svg/map-marker.svg" alt="map-marker" />
@@ -140,14 +140,14 @@ const whenChangeCity = (city: string) => {
   gap: 16px;
   height: 420px;
   background: #fff;
-  border-radius: 14px 14px 0 0;
+  border-radius: 14px 14px 14px 14px;
   padding: 24px 16px;
   border: 0.7px solid #e2e2e2;
   position: absolute;
   top: 110%;
   right: 0;
   width: 350px;
-  z-index: 1000;
+  z-index: 10000;
 }
 .city-dropdown__text {
   color: #232528;

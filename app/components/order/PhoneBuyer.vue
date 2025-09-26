@@ -3,7 +3,7 @@ import IMask from 'imask'
 const phoneInput = ref<HTMLInputElement | null>(null)
 const waitCode = ref(false)
 const waitCodeTimer = ref(35)
-const showButtonNewCode = ref(false)
+const showButtonNewCode = ref<boolean | null>(false)
 const verifiedCode = ref(false)
 const interval = ref<ReturnType<typeof setInterval> | null>(null)
 
@@ -14,6 +14,9 @@ onMounted(() => {
   })
 })
 
+const emit = defineEmits<{
+  (e: 'setStepPhone', value: number): void
+}>()
 const whenChangeBack = () => {
   waitCode.value = false
   if (interval.value) clearInterval(interval.value)
@@ -35,6 +38,9 @@ const whenChangeWaitCode = () => {
 const whenChangeVerifyCode = (params: Event) => {
   if ((params.target as HTMLInputElement).value === '1111') {
     verifiedCode.value = true
+    emit('setStepPhone', 1)
+    showButtonNewCode.value = null
+    if (interval.value) clearInterval(interval.value)
   } else {
     verifiedCode.value = false
   }
@@ -94,7 +100,7 @@ const whenChangeVerifyCode = (params: Event) => {
             alt="ok-code"
             class="buyer__input-ok-code"
           />
-          <span v-if="!showButtonNewCode">
+          <span v-if="showButtonNewCode === false">
             Если вы не получили SMS с кодом, то сможете получить новый через
             {{ waitCodeTimer }} сек</span
           >
@@ -102,7 +108,7 @@ const whenChangeVerifyCode = (params: Event) => {
           <button
             @click="whenChangeWaitCode"
             class="buyer__input-btn btn-reset"
-            v-else
+            v-if="showButtonNewCode === true"
           >
             Получить новый код
           </button>

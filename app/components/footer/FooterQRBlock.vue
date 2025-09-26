@@ -34,15 +34,30 @@ import IconItem from './IconItem.vue'
   background: #f6f5f5;
   padding: 24px;
 
+  @media screen and (max-width: 992px) {
+    height: max-content;
+  }
+
   &__content {
     display: grid;
-    grid-template-columns: 3fr;
+    grid-template-columns: repeat(3, max-content);
     gap: 16px;
+
+    @media screen and (max-width: 550px) {
+      grid-template-columns: repeat(2, max-content);
+    }
   }
   &__icon-wrapper {
     align-self: flex-end;
     display: flex;
     gap: 8px;
+
+    @media screen and (max-width: 550px) {
+      grid-column: 1 / 3;
+      width: 100%;
+      grid-row: 3/4;
+      justify-content: space-between;
+    }
   }
 
   &__title {
@@ -63,13 +78,20 @@ import IconItem from './IconItem.vue'
   &__qr-text {
     grid-column: 2 / 4;
     grid-row: 1/2;
-    display: block;
-    width: 100%;
+    max-width: 248px;
+    display: inline-block;
+    text-wrap: wrap;
     color: #504c4d;
     font-size: 13px;
     font-style: normal;
     font-weight: 400;
     line-height: 120%;
+
+    @media screen and (max-width: 550px) {
+      grid-column: 2/ 3;
+      grid-row: 1/2;
+      max-width: 159px;
+    }
   }
 
   &__qr-wrapper {

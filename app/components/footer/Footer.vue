@@ -19,7 +19,9 @@ import FooterQRBlock from './FooterQRBlock.vue'
           </div>
 
           <div class="footer__cancel">
-            <button class="footer__cancel-btn btn-reset">Отменить заказ</button>
+            <NuxtLink to="/cancel" class="footer__cancel-btn btn-reset"
+              >Отменить заказ</NuxtLink
+            >
           </div>
 
           <div class="footer__social">
@@ -48,7 +50,7 @@ import FooterQRBlock from './FooterQRBlock.vue'
 
       <div class="footer__copyright-wrapper">
         <span class="footer__copyright"> © МОТИВ, 2025 </span>
-        <NuxtLink class="footer__copyright" to="/privacy-policy"
+        <NuxtLink class="footer__copyright" to="/policy"
           >Политика конфиденциальности</NuxtLink
         >
       </div>
@@ -98,6 +100,12 @@ import FooterQRBlock from './FooterQRBlock.vue'
     grid-template-columns: repeat(3, max-content);
     gap: 48px;
     row-gap: 56px;
+
+    @media screen and (max-width: 992px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      row-gap: 20px;
+    }
   }
 
   &__rule {
@@ -124,12 +132,22 @@ import FooterQRBlock from './FooterQRBlock.vue'
   &__top {
     display: flex;
     justify-content: space-between;
+
+    @media screen and (max-width: 790px) {
+      flex-direction: column;
+      gap: 20px;
+    }
   }
 
   &__social-links {
     display: flex;
     justify-content: flex-end;
     gap: 8px;
+
+    @media screen and (max-width: 790px) {
+      justify-content: space-between;
+      width: 100%;
+    }
   }
 
   &__info {
@@ -137,6 +155,21 @@ import FooterQRBlock from './FooterQRBlock.vue'
     display: flex;
     flex-direction: column;
     gap: 2px;
+
+    @media screen and (max-width: 1200px) {
+      grid-column: 3 / 4;
+      align-items: flex-end;
+    }
+
+    @media screen and (max-width: 992px) {
+      grid-column: 1 / 2;
+      align-items: flex-end;
+    }
+
+    @media screen and (max-width: 790px) {
+      align-items: flex-start;
+      width: 100%;
+    }
   }
 
   &__social {
@@ -146,10 +179,27 @@ import FooterQRBlock from './FooterQRBlock.vue'
     flex-direction: column;
     gap: 16px;
 
+    @media screen and (max-width: 992px) {
+      grid-column: 1 / 2;
+    }
+
+    @media screen and (max-width: 790px) {
+      grid-column: 1 / 2;
+      width: 100%;
+      align-items: flex-start;
+    }
+
     &-link {
       padding: 16px;
       border-radius: 14px;
       background: #f6f5f5;
+
+      @media screen and (max-width: 790px) {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
 
     &-title {
@@ -162,10 +212,17 @@ import FooterQRBlock from './FooterQRBlock.vue'
   }
 
   &__contacts {
-    justify-self: end;
     display: flex;
     flex-direction: column;
     gap: 2px;
+
+    @media screen and (max-width: 992px) {
+      align-items: flex-end;
+    }
+
+    @media screen and (max-width: 790px) {
+      align-items: flex-start;
+    }
   }
 
   &__info-text {
@@ -182,9 +239,22 @@ import FooterQRBlock from './FooterQRBlock.vue'
     grid-column: 3 / 4;
     width: max-content;
 
+    @media screen and (max-width: 1200px) {
+      grid-column: 1 / 4;
+    }
+
+    @media screen and (max-width: 992px) {
+      grid-column: 1 / 2;
+    }
+
+    @media screen and (max-width: 790px) {
+      width: 100%;
+      justify-self: flex-start;
+    }
+
     &-btn {
-      overflow: hidden;
       color: #000;
+      text-decoration: none;
       border-radius: 14px;
       background: #f6f5f5;
       padding: 16px;
@@ -195,6 +265,12 @@ import FooterQRBlock from './FooterQRBlock.vue'
       line-height: 24px; /* 171.429% */
       letter-spacing: 0.56px;
       text-transform: uppercase;
+
+      @media screen and (max-width: 790px) {
+        display: block;
+        text-align: center;
+        width: 100%;
+      }
     }
   }
   &__tel {
@@ -212,6 +288,13 @@ import FooterQRBlock from './FooterQRBlock.vue'
     gap: 8px;
     justify-content: space-between;
     align-items: center;
+
+    @media screen and (max-width: 790px) {
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 32px 0;
+    }
   }
   &__copyright {
     text-decoration: none;

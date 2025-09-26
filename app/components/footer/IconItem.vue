@@ -21,5 +21,19 @@ defineProps<{
   height: 56px;
   border-radius: 14px;
   background: #fff;
+
+  @media screen and (max-width: 550px) {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+
+    &__img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+  }
 }
 </style>

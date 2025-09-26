@@ -15,7 +15,7 @@ const handleSelect = (value: string) => {
 </script>
 <template>
   <div class="dropdown" @click="toggleState = !toggleState">
-    <img src="/svg/sim.svg" alt="arrow-down" class="dropdown__icon" />
+    <img src="/svg/sim.svg" alt="arrow-down" class="dropdown__sim" />
     <div class="dropdown__text">
       <span class="dropdown__text-title">Свердловская область</span>
       <span class="dropdown__text-subtitle"
@@ -69,7 +69,12 @@ const handleSelect = (value: string) => {
   flex-shrink: 0;
   aspect-ratio: 1/1;
 }
-
+.dropdown__sim {
+  @media screen and (max-width: 992px) {
+    width: 48px;
+    height: 49px;
+  }
+}
 .dropdown {
   position: relative;
   background: #fff;
@@ -81,6 +86,11 @@ const handleSelect = (value: string) => {
   gap: 10px;
   width: 100%;
   max-width: 660px;
+
+  @media screen and (max-width: 992px) {
+    max-width: 100%;
+    padding: 16px;
+  }
 
   &__uncheked {
     width: 24px;
@@ -132,6 +142,10 @@ const handleSelect = (value: string) => {
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    @media screen and (max-width: 992px) {
+      margin-right: auto;
+    }
 
     &-title {
       color: #000;

@@ -78,6 +78,10 @@ button {
   padding: 24px 16px;
   background: #fff;
   border-radius: 12px;
+
+  @media screen and (max-width: 992px) {
+    max-width: 100%;
+  }
 }
 
 .SwitchRoot {
