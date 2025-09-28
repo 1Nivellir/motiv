@@ -153,7 +153,7 @@ h3 {
 
 .AccordionChevron {
   background-image: url('/svg/acc-close.svg');
-  background-size: contain;
+  background-size: 36px 36px;
   background-repeat: no-repeat;
   background-position: center;
   width: 36px;
