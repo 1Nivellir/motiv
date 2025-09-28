@@ -323,6 +323,7 @@ const setActivePickup = (id: number) => {
 
   @media screen and (max-width: 760px) {
     height: 90vh;
+    padding: 16px;
   }
 }
 </style>
