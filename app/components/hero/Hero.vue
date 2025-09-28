@@ -47,7 +47,7 @@ const handlePause = () => {
 <template>
   <div class="hero">
     <div>
-      <swiper-container :loop="true" ref="containerRef">
+      <swiper-container ref="containerRef">
         <swiper-slide v-for="(slide, idx) in slides" :key="idx">
           <video
             id="hero-video"
@@ -55,7 +55,6 @@ const handlePause = () => {
             :src="slide"
             autoplay
             :muted="isMuted"
-            loop
             playsinline
             class="hero__video"
           />

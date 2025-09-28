@@ -52,7 +52,11 @@ const whenChangeCity = (city: string) => {
       <div class="city-dropdown" @click="handleToggle" id="wrapper">
         <img src="/svg/map-marker.svg" alt="map-marker" />
         <span class="city-dropdown__text">{{ cartStore.getUserLocation }}</span>
-        <img src="/svg/chevron.svg" alt="chevron" />
+        <img
+          src="/svg/chevron.svg"
+          alt="chevron"
+          class="city-dropdown__chevron-icon"
+        />
 
         <div class="city-dropdown__menu" v-if="toggleState" @click.stop>
           <h5 class="city-dropdown__menu-title">
@@ -91,12 +95,18 @@ const whenChangeCity = (city: string) => {
 .city-dropdown__menu-item {
   cursor: pointer;
 }
+.city-dropdown__chevron-icon {
+  @media screen and (max-width: 992px) {
+    display: none;
+  }
+}
 .city-dropdown__menu-items {
   display: flex;
   flex-direction: column;
   gap: 16px;
   overflow: auto;
   height: 100%;
+  width: 100%;
 }
 .city-dropdown__menu-input {
   width: 100%;
@@ -111,7 +121,6 @@ const whenChangeCity = (city: string) => {
     color: #757575;
 
     text-overflow: ellipsis;
-    font-family: Montserrat;
     font-size: 17px;
     font-style: normal;
     font-weight: 400;
@@ -148,6 +157,16 @@ const whenChangeCity = (city: string) => {
   right: 0;
   width: 350px;
   z-index: 10000;
+
+  @media screen and (max-width: 992px) {
+    right: -10px;
+    width: 340px;
+  }
+
+  @media screen and (max-width: 400px) {
+    right: -10px;
+    width: 300px;
+  }
 }
 .city-dropdown__text {
   color: #232528;
@@ -158,6 +177,10 @@ const whenChangeCity = (city: string) => {
   font-weight: 500;
   line-height: 24px; /* 160% */
   letter-spacing: -0.3px;
+
+  @media screen and (max-width: 992px) {
+    display: none;
+  }
 }
 .city-dropdown {
   height: 36px;

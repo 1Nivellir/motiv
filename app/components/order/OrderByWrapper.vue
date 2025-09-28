@@ -1,13 +1,20 @@
 <script lang="ts" setup>
+import { useCartStore } from '#imports'
 import Button from '../common/Button.vue'
 import Cart from './Cart.vue'
 import MethodOfObtaining from './MethodOfObtaining.vue'
 import PaymentMethod from './PaymentMethod.vue'
 import PhoneBuyer from './PhoneBuyer.vue'
-const stepsUser = ref<number[]>([])
 
+const stepsUser = ref<number[]>([])
+const cartStore = useCartStore()
 const setStepsUser = (value: number) => {
   stepsUser.value.push(value)
+}
+
+const paymentMethod = () => {
+  navigateTo('/success', { replace: true })
+  cartStore.clearCart()
 }
 </script>
 
@@ -16,21 +23,27 @@ const setStepsUser = (value: number) => {
     <Cart />
     <PhoneBuyer @set-step-phone="setStepsUser" />
     <MethodOfObtaining
-      v-if="stepsUser.includes(1)"
       @set-step-method="setStepsUser"
+      v-if="stepsUser.includes(1)"
     />
     <PaymentMethod v-if="stepsUser.includes(2)" />
-    <Button v-if="stepsUser.includes(2)">Оплатить 1550 ₽ </Button>
+    <Button @click="paymentMethod" v-if="stepsUser.includes(2)"
+      >Оплатить 1550 ₽
+    </Button>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .order {
-  max-width: 712px;
+  width: 712px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   width: 100%;
+
+  @media screen and (max-width: 992px) {
+    max-width: 100%;
+  }
 }
 
 :deep(.block-title) {

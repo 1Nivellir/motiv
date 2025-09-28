@@ -7,7 +7,7 @@ const checkedPayment = ref<string>('Картой')
 
 <template>
   <div class="payment-method">
-    <h5 class="block-title">Способ оплаты</h5>
+    <h5 class="block-title">Оплаты</h5>
     <div class="payment-method__cards">
       <Card
         v-for="payment in PAYMENTS"
@@ -34,5 +34,9 @@ const checkedPayment = ref<string>('Картой')
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
+
+  @media screen and (max-width: 1150px) {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

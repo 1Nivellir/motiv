@@ -1,13 +1,14 @@
 <script lang="ts" setup>
+// @ts-nocheck
 import MySlider from '@/components/common/MySlider.vue'
 import { useCartStore } from '@/stores/cart'
 import { MINUTES_MARKS, TRAFFIC_MARKS } from '@/utils/form-data'
 import regions from '@/utils/regions'
+import { equals } from 'ramda'
 import InfoBlock from '../order/InfoBlock.vue'
 import OrderByWrapper from '../order/OrderByWrapper.vue'
 import DopOffers from './DopOffers.vue'
 import RegionDropdown from './RegionDropdown.vue'
-
 const cartStore = useCartStore()
 const unlimitedCallsWithinTheNetwork = ref(false)
 const everywhereFeelsLikeHome = ref(false)
@@ -32,6 +33,52 @@ const whenClickAddCart = () => {
     price: 500,
   }
   cartStore.setCart(body)
+}
+
+const getShowButton = computed(() => {
+  const nowParameters = {
+    traffic: traffic.value,
+    minutes: minutes.value,
+    unlimitedCallsWithinTheNetwork: unlimitedCallsWithinTheNetwork.value,
+    everywhereFeelsLikeHome: everywhereFeelsLikeHome.value,
+  }
+  const cartParameters =
+    cartStore.getCart?.some((item) =>
+      equals(
+        {
+          traffic: item.traffic,
+          minutes: item.minutes,
+          unlimitedCallsWithinTheNetwork: item.unlimitedCallsWithinTheNetwork,
+          everywhereFeelsLikeHome: item.everywhereFeelsLikeHome,
+        },
+        nowParameters
+      )
+    ) || false
+  return !cartParameters
+})
+
+const removeItemFromCart = () => {
+  const nowParameters = {
+    traffic: traffic.value,
+    minutes: minutes.value,
+    unlimitedCallsWithinTheNetwork: unlimitedCallsWithinTheNetwork.value,
+    everywhereFeelsLikeHome: everywhereFeelsLikeHome.value,
+  }
+
+  const element = cartStore.getCart?.findIndex((item) =>
+    equals(
+      {
+        traffic: item.traffic,
+        minutes: item.minutes,
+        unlimitedCallsWithinTheNetwork: item.unlimitedCallsWithinTheNetwork,
+        everywhereFeelsLikeHome: item.everywhereFeelsLikeHome,
+      },
+      nowParameters
+    )
+  )
+  if (element !== -1) {
+    cartStore.deleteSim(element)
+  }
 }
 </script>
 
@@ -84,7 +131,7 @@ const whenClickAddCart = () => {
         >
         <div class="price_wrapper__button-wrapper">
           <button
-            v-if="cartStore.getCart === null"
+            v-if="getShowButton"
             @click="whenClickAddCart"
             class="price_wrapper__button btn-reset"
           >
@@ -97,7 +144,7 @@ const whenClickAddCart = () => {
           </button>
           <button
             v-else
-            @click="cartStore.clearCart"
+            @click="removeItemFromCart"
             class="price_wrapper__button btn-reset price_wrapper__button-cart"
           >
             в корзине
@@ -139,7 +186,9 @@ const whenClickAddCart = () => {
         </div>
       </div>
     </div>
-    <InfoBlock v-if="cartStore.getCart === null" />
+    <InfoBlock
+      v-if="cartStore.getCart === null || cartStore.getCart.length === 0"
+    />
     <OrderByWrapper v-else />
   </div>
 </template>
@@ -242,13 +291,15 @@ const whenClickAddCart = () => {
   display: flex;
   gap: 72px;
 
+  @media screen and (max-width: 1150px) {
+    gap: 50px;
+  }
   @media screen and (max-width: 992px) {
     flex-direction: column;
     gap: 50px;
   }
 }
 .form__left {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 32px;

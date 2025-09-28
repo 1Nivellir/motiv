@@ -17,20 +17,24 @@ const handleSelect = (value: string) => {
   <div class="dropdown" @click="toggleState = !toggleState">
     <img src="/svg/sim.svg" alt="arrow-down" class="dropdown__sim" />
     <div class="dropdown__text">
-      <span class="dropdown__text-title">Свердловская область</span>
+      <span class="dropdown__text-title">{{ isCheckedRegion }}</span>
       <span class="dropdown__text-subtitle"
         >Стоимость и доступные функции комплекта подключения для Свердоловской
         области
       </span>
     </div>
     <div class="dropdown__chevron">
-      <img
-        src="/svg/chevron.svg"
-        alt="chevron"
-        class="dropdown__chevron-icon"
-        style="width: 12px; height: 8px"
-        :style="{ transform: toggleState ? 'rotate(180deg)' : 'rotate(0deg)' }"
-      />
+      <button class="btn-reset">
+        <img
+          src="/svg/chevron.svg"
+          alt="chevron"
+          class="dropdown__chevron-icon"
+          style="width: 12px; height: 8px"
+          :style="{
+            transform: toggleState ? 'rotate(180deg)' : 'rotate(0deg)',
+          }"
+        />
+      </button>
     </div>
     <div class="dropdown__menu" v-if="toggleState">
       <div class="dropdown__menu-header">
@@ -74,6 +78,10 @@ const handleSelect = (value: string) => {
     width: 48px;
     height: 49px;
   }
+}
+.dropdown__chevron {
+  width: 24px;
+  height: 24px;
 }
 .dropdown {
   position: relative;
@@ -166,6 +174,7 @@ const handleSelect = (value: string) => {
   }
 }
 .dropdown__chevron-icon {
+  object-fit: cover;
   transition: transform 0.3s ease-in-out;
 }
 </style>

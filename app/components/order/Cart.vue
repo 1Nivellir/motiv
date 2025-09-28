@@ -1,30 +1,19 @@
 <script lang="ts" setup>
-import type { Cart } from '~/types/app'
-const mock: Cart[] = [
-  {
-    traffic: 512,
-    minutes: 1000,
-    unlimitedCallsWithinTheNetwork: true,
-    everywhereFeelsLikeHome: true,
-    count: 1,
-    price: 500,
-  },
-  {
-    traffic: 256,
-    minutes: 100,
-    unlimitedCallsWithinTheNetwork: false,
-    everywhereFeelsLikeHome: true,
-    count: 2,
-    price: 1000,
-  },
-]
+import { useCartStore } from '@/stores/cart'
+const cartStore = useCartStore()
 
+const mock = computed(() => {
+  return cartStore.getCart
+})
 const whenClickDelete = (index: number) => {
-  console.log(index)
+  cartStore.deleteSim(index)
 }
 
-const whenClickAddMore = (index: number) => {
-  console.log(index)
+const handleClickDeleteItem = (index: number) => {
+  cartStore.deleteSimItem(index)
+}
+const handleClickAdd = (index: number) => {
+  cartStore.addMoreSim(index)
 }
 </script>
 
@@ -40,8 +29,10 @@ const whenClickAddMore = (index: number) => {
         <div class="cart__item-header">
           <span class="cart__item-header-title">
             <img src="/svg/traffic.svg" alt="traffic" />
-            {{ item.traffic }} Гб</span
-          >
+            {{
+              Number.isFinite(item.traffic) ? `${item.traffic} Гб` : 'Безлимит'
+            }}
+          </span>
           <span class="cart__item-header-title">
             <img src="/svg/mins.svg" alt="mins" />
             {{ item.minutes }} минут
@@ -63,12 +54,20 @@ const whenClickAddMore = (index: number) => {
             <button
               @click="whenClickDelete(index)"
               class="cart__item-footer-button btn-reset"
+              v-if="item.count === 1"
             >
               <img src="/svg/trash.svg" alt="trash" />
             </button>
+            <button
+              v-else
+              @click="handleClickDeleteItem(index)"
+              class="cart__item-footer-button btn-reset"
+            >
+              <img src="/svg/minus.svg" alt="minus" />
+            </button>
             <span class="cart__item-footer-btn-count">{{ item.count }}</span>
             <button
-              @click="whenClickAddMore(index)"
+              @click="handleClickAdd(index)"
               class="cart__item-footer-button btn-reset"
             >
               <img src="/svg/plus.svg" alt="plus" />
@@ -97,6 +96,7 @@ const whenClickAddMore = (index: number) => {
     display: flex;
     align-items: center;
     padding: 10px;
+    width: 44px;
   }
 
   &__item-footer-price {
@@ -126,6 +126,7 @@ const whenClickAddMore = (index: number) => {
     font-size: 17px;
     font-style: normal;
     font-weight: 600;
+    width: 18px;
     line-height: 24px; /* 141.176% */
     letter-spacing: -0.34px;
   }

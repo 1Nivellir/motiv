@@ -126,6 +126,10 @@ const whenChangeVerifyCode = (params: Event) => {
   display: flex;
   flex-direction: column;
 
+  @media screen and (max-width: 992px) {
+    padding: 16px;
+  }
+
   &__input-label {
     position: relative;
     display: flex;

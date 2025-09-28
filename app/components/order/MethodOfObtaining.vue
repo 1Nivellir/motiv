@@ -1,16 +1,74 @@
 <script lang="ts" setup>
 import { useCartStore } from '@/stores/cart'
+import mockPickup from '@/utils/mock-pickup'
+import type { Pickup } from '~/types/app'
+import DialogForPickup from './DialogForPickup.vue'
 import Map from './Map.vue'
+
+const showDialog = ref(false)
 const activeMethod = ref<'pickup' | 'delivery'>('pickup')
 const cartStore = useCartStore()
+const activePickup = ref<Pickup | null>(null)
+const showErrorHouse = ref<boolean | null>(null)
+const deliveryAddress = reactive({
+  street: '',
+  house: '',
+  apartment: '',
+  comment: '',
+})
 
 const emit = defineEmits<{
   (e: 'setStepMethod', value: number): void
 }>()
+
+const toggleBodyScroll = () => {
+  if (showDialog.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = 'auto'
+  }
+}
+
+const setActivePickup = (index: number) => {
+  activePickup.value = mockPickup()[index] || null
+  emit('setStepMethod', 2)
+}
+watch(() => showDialog.value, toggleBodyScroll)
+
+const center = ref({
+  lon: 60.609575,
+  lat: 56.779767,
+})
+
+const showError = () => {
+  if (deliveryAddress.house === '') {
+    showErrorHouse.value = true
+  } else {
+    showErrorHouse.value = false
+  }
+}
+
+watch(deliveryAddress, (newValue) => {
+  if (
+    newValue.house === '' ||
+    newValue.street === '' ||
+    newValue.apartment === ''
+  ) {
+    return
+  }
+  emit('setStepMethod', 2)
+})
 </script>
 
 <template>
   <div class="method-of-obtaining">
+    <DialogForPickup
+      @setActivePickup="setActivePickup"
+      :activePickup="activePickup || null"
+      :listPickup="mockPickup()"
+      :isOpen="showDialog"
+      @close="showDialog = false"
+    />
     <h2 class="block-title" style="margin-bottom: 8px">Способ получения</h2>
     <p class="method-of-obtaining__text">
       Доставим в <span class="method-of-obtaining__text-city">{{
@@ -61,23 +119,38 @@ const emit = defineEmits<{
 
     <div class="method-of-obtaining__map" v-if="activeMethod === 'pickup'">
       <div class="method-of-obtaining__map-title">
-        <span class="method-of-obtaining__map-title-text">
-          <img src="/svg/pickup.svg" alt="pickup" />Пункт СДЕК YEKB15</span
+        <div
+          class="method-of-obtaining__map-title-text-container"
+          v-if="activePickup !== null"
         >
-        <span class="method-of-obtaining__map-title-text-subtitle">
-          ул. Гурзуфская, 15
-          <span> <strong>18-20 сентября, </strong> стоимость 258 ₽ </span></span
-        >
+          <span class="method-of-obtaining__map-title-text">
+            <img src="/svg/pickup.svg" alt="pickup" />{{
+              activePickup?.name
+            }}</span
+          >
+          <span class="method-of-obtaining__map-title-text-subtitle">
+            {{ activePickup?.address }}
+            <span>
+              <strong>{{ activePickup?.time }}, </strong>
+              {{ activePickup?.price }} ₽</span
+            ></span
+          >
+        </div>
+        <div v-else>
+          <span class="method-of-obtaining__map-title-text">
+            Необходимо выбрать пункт выдачи
+          </span>
+        </div>
 
         <button
           class="method-of-obtaining__map-title-text-button btn-reset"
-          @click="emit('setStepMethod', 2)"
+          @click="showDialog = true"
         >
           <img src="/svg/map-marker.svg" alt="edit" />Изменить
         </button>
       </div>
       <div class="wrapper-map">
-        <Map />
+        <Map :activemarker="activePickup" :defaultcenter="center" />
       </div>
     </div>
 
@@ -86,28 +159,36 @@ const emit = defineEmits<{
       v-if="activeMethod === 'delivery'"
     >
       <input
+        v-model="deliveryAddress.street"
         type="text"
         placeholder="Улица"
         class="input"
-        :style="{ gridColumn: '1 / 3' }"
       />
+      <label for="house">
+        <input
+          v-model="deliveryAddress.house"
+          :class="{ errorInput: showErrorHouse }"
+          type="text"
+          placeholder="Дом"
+          class="input"
+          id="house"
+          @click="showErrorHouse = true"
+          @input="showError()"
+        />
+        <span class="error-text" v-if="showErrorHouse">Укажите номер дома</span>
+      </label>
+
       <input
-        type="text"
-        placeholder="Дом"
-        class="input"
-        :style="{ gridColumn: '1 / 2' }"
-      />
-      <input
+        v-model="deliveryAddress.apartment"
         type="text"
         placeholder="Квартира"
         class="input"
-        :style="{ gridColumn: '2 / 3' }"
       />
       <input
+        v-model="deliveryAddress.comment"
         type="text"
         placeholder="Комментарий"
         class="input"
-        :style="{ gridColumn: '1 / 3' }"
       />
     </div>
   </div>
@@ -120,8 +201,22 @@ const emit = defineEmits<{
   padding-top: 32px;
   row-gap: 20px;
   column-gap: 24px;
+
+  @media screen and (max-width: 760px) {
+    grid-template-columns: 1fr;
+  }
 }
 
+.error-text {
+  color: #cb272d;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+}
+.input.errorInput {
+  background: #ffeff0;
+}
 .input {
   border-radius: 14px;
   background: #f6f5f5;
@@ -132,6 +227,33 @@ const emit = defineEmits<{
   border: none;
   &::placeholder {
     color: #757575;
+  }
+  &:nth-child(1) {
+    grid-column: 1 / 3;
+    @media screen and (max-width: 760px) {
+      grid-column: 1 / 2;
+    }
+  }
+
+  &:nth-child(2) {
+    grid-column: 1 / 2;
+    @media screen and (max-width: 760px) {
+      grid-column: 1 / 2;
+    }
+  }
+
+  &:nth-child(3) {
+    grid-column: 2 / 3;
+    @media screen and (max-width: 760px) {
+      grid-column: 1 / 2;
+    }
+  }
+
+  &:nth-child(4) {
+    grid-column: 1 / 3;
+    @media screen and (max-width: 760px) {
+      grid-column: 1 / 2;
+    }
   }
 }
 .method-of-obtaining__map-title-text-button {
@@ -152,6 +274,11 @@ const emit = defineEmits<{
   letter-spacing: 0.56px;
   width: max-content;
   text-transform: uppercase;
+
+  @media screen and (max-width: 760px) {
+    width: 100%;
+    justify-content: center;
+  }
 }
 .method-of-obtaining__map-title-text-subtitle {
   margin-bottom: auto;
@@ -178,12 +305,20 @@ const emit = defineEmits<{
   font-weight: 600;
   line-height: 24px;
   letter-spacing: -0.34px;
+
+  @media screen and (max-width: 760px) {
+    align-items: flex-start;
+  }
 }
 .wrapper-map {
   width: 100%;
-  min-height: 208px;
+  height: 208px;
   overflow: hidden;
   border-radius: 14px;
+
+  @media screen and (max-width: 760px) {
+    height: 160px;
+  }
 }
 .method-of-obtaining__map-title {
   width: 100%;
@@ -192,12 +327,22 @@ const emit = defineEmits<{
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  @media screen and (max-width: 760px) {
+    min-height: max-content;
+    gap: 20px;
+  }
 }
 .method-of-obtaining__map {
   padding-top: 32px;
   display: flex;
   gap: 16px;
   justify-content: space-between;
+
+  @media screen and (max-width: 760px) {
+    flex-direction: column;
+    gap: 16px;
+  }
 }
 .method-of-obtaining__button-icon {
   background-color: #fff;
@@ -224,6 +369,10 @@ const emit = defineEmits<{
   display: flex;
   flex-direction: column;
   gap: 4px;
+
+  @media screen and (max-width: 760px) {
+    align-items: flex-start;
+  }
 }
 .method-of-obtaining__button-content-title {
   overflow: hidden;
@@ -242,6 +391,11 @@ const emit = defineEmits<{
   justify-content: space-between;
   width: 100%;
   flex-shrink: 1;
+
+  @media screen and (max-width: 760px) {
+    flex-direction: column;
+    gap: 16px;
+  }
 }
 .method-of-obtaining__button-content-subtitle {
   overflow: hidden;

@@ -1,5 +1,4 @@
 export const FOOTER_LINKS = [
-
   {
     icon: '/svg/play-market.svg',
     link: 'http://',
