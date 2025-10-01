@@ -358,6 +358,7 @@ const removeItemFromCart = () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 72px;
+  align-items: start;
 
   @media screen and (max-width: 1150px) {
     gap: 50px;
@@ -369,6 +370,8 @@ const removeItemFromCart = () => {
   }
 }
 .form__left {
+  position: sticky;
+  top: 20px;
   width: 100%;
   display: flex;
   flex-direction: column;
