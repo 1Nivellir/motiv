@@ -51,6 +51,13 @@ onMounted(() => {
   }, 0)
 })
 
+watch(
+  () => inputCode.value,
+  (newValue) => {
+    if (newValue) inputCode.value?.focus()
+  }
+)
+
 const whenChangeVerifyCode = (params: Event) => {
   if ((params.target as HTMLInputElement).value === '1111') {
     verifiedCode.value = true
