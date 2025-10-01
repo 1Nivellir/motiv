@@ -1,14 +1,45 @@
 <script lang="ts" setup>
 // @ts-nocheck
+import arrowForTippy from '@/assets/svg/arrow-for-tippy.svg?raw'
 import MySlider from '@/components/common/MySlider.vue'
 import { useCartStore } from '@/stores/cart'
 import { MINUTES_MARKS, TRAFFIC_MARKS } from '@/utils/form-data'
 import regions from '@/utils/regions'
 import { equals } from 'ramda'
+import { useTippy } from 'vue-tippy'
+import MyTooltip from '../common/MyTooltip.vue'
 import InfoBlock from '../order/InfoBlock.vue'
 import OrderByWrapper from '../order/OrderByWrapper.vue'
 import DopOffers from './DopOffers.vue'
 import RegionDropdown from './RegionDropdown.vue'
+const trafficInfo = ref()
+const mobileTrafficInfo = ref()
+
+const getContentTippy = (descr: string) => {
+  return {
+    content: descr,
+    placement: 'right-start',
+    theme: 'motiv',
+    arrow: arrowForTippy,
+    offset: [0, 20],
+    maxWidth: 420,
+    delay: [0, 100],
+  }
+}
+useTippy(
+  trafficInfo,
+  getContentTippy(
+    'Представлены варианты наполнения, после регистрации вы можете собрать свой индивидуальный тариф в мобильном приложении'
+  )
+)
+
+useTippy(
+  mobileTrafficInfo,
+  getContentTippy(
+    'Представлены варианты наполнения, после регистрации вы можете собрать свой индивидуальный тариф в мобильном приложении'
+  )
+)
+
 const cartStore = useCartStore()
 const unlimitedCallsWithinTheNetwork = ref(false)
 const everywhereFeelsLikeHome = ref(false)
@@ -86,27 +117,45 @@ const removeItemFromCart = () => {
   <div class="form container" id="form-order">
     <div class="form__left">
       <RegionDropdown :regions="regions()" />
-      <MySlider
-        :start-index="4"
-        :marks="TRAFFIC_MARKS"
-        text="Гб"
-        @update:model-value="whenChangeTariff"
-      >
-        <template #icon>
-          <img src="/svg/traffic.svg" alt="traffic" />
-        </template>
-      </MySlider>
+      <div>
+        <h4 class="form__left-title">
+          Интернет-трафик
 
-      <MySlider
-        :start-index="3"
-        :marks="MINUTES_MARKS"
-        text="минут"
-        @update:model-value="whenChangeMinutes"
-      >
-        <template #icon>
-          <img src="/svg/mins.svg" alt="mins" />
-        </template>
-      </MySlider>
+          <MyTooltip>
+            <img src="/svg/info.svg" alt="info" class="form__left-title-info" />
+          </MyTooltip>
+        </h4>
+        <MySlider
+          :start-index="4"
+          :marks="TRAFFIC_MARKS"
+          text="Гб"
+          @update:model-value="whenChangeTariff"
+        >
+          <template #icon>
+            <img src="/svg/traffic.svg" alt="traffic" />
+          </template>
+        </MySlider>
+      </div>
+
+      <div>
+        <h4 class="form__left-title">
+          Звонки на номера РФ
+          <MyTooltip>
+            <img src="/svg/info.svg" alt="info" class="form__left-title-info" />
+          </MyTooltip>
+        </h4>
+        <MySlider
+          :start-index="3"
+          :marks="MINUTES_MARKS"
+          text="минут"
+          @update:model-value="whenChangeMinutes"
+        >
+          <template #icon>
+            <img src="/svg/mins.svg" alt="mins" />
+          </template>
+        </MySlider>
+      </div>
+
       <div class="dop-offers-wrapper">
         <h3 class="dop-offers-wrapper__title">Вам также доступно</h3>
         <DopOffers
@@ -194,6 +243,24 @@ const removeItemFromCart = () => {
 </template>
 
 <style lang="scss" scoped>
+.form__left-title-info {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+.form__left-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+  color: #000;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.52px;
+  text-transform: uppercase;
+}
 .mp-links {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -288,7 +355,8 @@ const removeItemFromCart = () => {
   }
 }
 .form {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 72px;
 
   @media screen and (max-width: 1150px) {
@@ -296,6 +364,7 @@ const removeItemFromCart = () => {
   }
   @media screen and (max-width: 992px) {
     flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 50px;
   }
 }

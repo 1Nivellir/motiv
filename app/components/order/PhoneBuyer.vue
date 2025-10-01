@@ -6,13 +6,19 @@ const waitCodeTimer = ref(35)
 const showButtonNewCode = ref<boolean | null>(false)
 const verifiedCode = ref(false)
 const interval = ref<ReturnType<typeof setInterval> | null>(null)
+const inputCode = ref<HTMLInputElement | null>(null)
 
-onMounted(() => {
+const initMask = () => {
   if (!phoneInput.value) return
   IMask(phoneInput.value, {
     mask: '+{7} (000) 000-00-00',
   })
+}
+onMounted(() => {
+  initMask
 })
+
+watch(() => phoneInput.value, initMask)
 
 const emit = defineEmits<{
   (e: 'setStepPhone', value: number): void
@@ -35,15 +41,30 @@ const whenChangeWaitCode = () => {
   }, 1000)
 }
 
+onMounted(() => {
+  phoneInput.value?.focus()
+  setTimeout(() => {
+    phoneInput.value?.classList.add('visible')
+    setTimeout(() => {
+      phoneInput.value?.classList.remove('visible')
+    }, 5000)
+  }, 0)
+})
+
 const whenChangeVerifyCode = (params: Event) => {
   if ((params.target as HTMLInputElement).value === '1111') {
     verifiedCode.value = true
     emit('setStepPhone', 1)
     showButtonNewCode.value = null
+    if (inputCode.value) inputCode.value.blur()
     if (interval.value) clearInterval(interval.value)
   } else {
     verifiedCode.value = false
   }
+}
+
+const handleClickNewCode = () => {
+  whenChangeWaitCode()
 }
 </script>
 
@@ -54,6 +75,7 @@ const whenChangeVerifyCode = (params: Event) => {
       <div class="buyer__input-wrapper" v-if="!waitCode">
         <label class="buyer__input-label">
           <input
+            autofocus
             type="text"
             class="buyer__input"
             placeholder="Телефон"
@@ -88,11 +110,13 @@ const whenChangeVerifyCode = (params: Event) => {
         <label class="buyer__input-label">
           <input
             type="number"
+            ref="inputCode"
             @input="whenChangeVerifyCode"
             class="buyer__input buyer__input-wait-code"
             placeholder="Код из SMS"
             inputmode="numeric"
             pattern="[0-9]*"
+            autofocus
           />
           <img
             v-if="verifiedCode"
@@ -100,18 +124,19 @@ const whenChangeVerifyCode = (params: Event) => {
             alt="ok-code"
             class="buyer__input-ok-code"
           />
-          <span v-if="showButtonNewCode === false">
-            Если вы не получили SMS с кодом, то сможете получить новый через
-            {{ waitCodeTimer }} сек</span
-          >
-
-          <button
-            @click="whenChangeWaitCode"
-            class="buyer__input-btn btn-reset"
-            v-if="showButtonNewCode === true"
-          >
-            Получить новый код
-          </button>
+          <span>
+            Если вы не получили SMS с кодом, то сможете
+            <button
+              v-if="showButtonNewCode === true"
+              class="btn-reset btn-new-code"
+              @click="handleClickNewCode"
+            >
+              получить новый
+            </button>
+            <span v-if="showButtonNewCode === false">
+              получить новый через {{ waitCodeTimer }} сек
+            </span>
+          </span>
         </label>
       </div>
     </transition>
@@ -119,6 +144,22 @@ const whenChangeVerifyCode = (params: Event) => {
 </template>
 
 <style lang="scss" scoped>
+.btn-new-code {
+  color: #0c78ed;
+}
+.buyer__input.visible {
+  background: #ffdec9;
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink {
+  0%,
+  100% {
+    background: #ffdec9;
+  }
+  50% {
+    background: #f6f5f5; /* или исходный цвет */
+  }
+}
 .buyer {
   border-radius: 14px;
   background: #fff;
@@ -181,7 +222,7 @@ const whenChangeVerifyCode = (params: Event) => {
     border: none;
     outline: none;
     background: #f6f5f5;
-    height: 56px;
+    height: 54px;
     padding: 16px;
     border-radius: 14px;
     overflow: hidden;

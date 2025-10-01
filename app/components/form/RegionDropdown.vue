@@ -17,56 +17,66 @@ const handleSelect = (value: string) => {
   <div class="dropdown" @click="toggleState = !toggleState">
     <img src="/svg/sim.svg" alt="arrow-down" class="dropdown__sim" />
     <div class="dropdown__text">
-      <span class="dropdown__text-title">{{ isCheckedRegion }}</span>
+      <div class="title__wrapper">
+        <span class="dropdown__text-title">{{ isCheckedRegion }}</span>
+        <button class="btn-reset">
+          <img
+            src="/svg/chevron.svg"
+            alt="chevron"
+            class="dropdown__chevron-icon"
+            style="width: 12px; height: 8px"
+            :style="{
+              transform: toggleState ? 'rotate(180deg)' : 'rotate(0deg)',
+            }"
+          />
+        </button>
+      </div>
       <span class="dropdown__text-subtitle"
         >Стоимость и доступные функции комплекта подключения для Свердоловской
         области
       </span>
     </div>
-    <div class="dropdown__chevron">
-      <button class="btn-reset">
-        <img
-          src="/svg/chevron.svg"
-          alt="chevron"
-          class="dropdown__chevron-icon"
-          style="width: 12px; height: 8px"
-          :style="{
-            transform: toggleState ? 'rotate(180deg)' : 'rotate(0deg)',
-          }"
-        />
-      </button>
-    </div>
-    <div class="dropdown__menu" v-if="toggleState">
-      <div class="dropdown__menu-header">
-        <span class="dropdown__menu-header-title">Регион подключения </span>
-        <button class="btn-reset">
-          <img
-            src="/svg/close.svg"
-            alt="close"
-            class="dropdown__menu-header-close"
-          />
-        </button>
+    <transition name="fade" mode="out-in">
+      <div class="dropdown__menu-background" v-if="toggleState">
+        <div class="dropdown__menu">
+          <div class="dropdown__menu-header">
+            <span class="dropdown__menu-header-title">Регион подключения </span>
+            <button class="btn-reset">
+              <img
+                src="/svg/close.svg"
+                alt="close"
+                class="dropdown__menu-header-close"
+              />
+            </button>
+          </div>
+          <div
+            class="dropdown__menu-item"
+            v-for="region in regions"
+            :key="region"
+            @click="handleSelect(region)"
+          >
+            <span class="dropdown__menu-item-title">{{ region }}</span>
+            <img
+              v-if="isCheckedRegion === region"
+              src="/svg/cheked.svg"
+              alt="cheked"
+              class="dropdown__menu-item-icon"
+            />
+            <div v-else class="dropdown__uncheked"></div>
+          </div>
+        </div>
       </div>
-      <div
-        class="dropdown__menu-item"
-        v-for="region in regions"
-        :key="region"
-        @click="handleSelect(region)"
-      >
-        <span class="dropdown__menu-item-title">{{ region }}</span>
-        <img
-          v-if="isCheckedRegion === region"
-          src="/svg/cheked.svg"
-          alt="cheked"
-          class="dropdown__menu-item-icon"
-        />
-        <div v-else class="dropdown__uncheked"></div>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.title__wrapper {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
 .active {
   width: 12px;
   height: 12px;
@@ -84,7 +94,6 @@ const handleSelect = (value: string) => {
   height: 24px;
 }
 .dropdown {
-  position: relative;
   background: #fff;
   border-radius: 12px;
   padding: 20px 24px;
@@ -122,10 +131,8 @@ const handleSelect = (value: string) => {
     align-items: center;
   }
   &__menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
     width: 100%;
+    max-width: 420px;
     z-index: 1000;
     background: #fff;
     border-radius: 12px;
@@ -134,6 +141,13 @@ const handleSelect = (value: string) => {
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    @media screen and (max-width: 760px) {
+      max-width: 100%;
+      padding: 16px;
+
+      border-radius: 12px 12px 0 0;
+    }
 
     &-item {
       display: flex;
@@ -156,8 +170,11 @@ const handleSelect = (value: string) => {
     }
 
     &-title {
+      display: inline-block;
       color: #000;
       font-size: 17px;
+      margin-right: auto;
+      width: 100%;
       font-style: normal;
       font-weight: 600;
       line-height: 24px;
@@ -173,8 +190,34 @@ const handleSelect = (value: string) => {
     }
   }
 }
+
+.dropdown__menu-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 760px) {
+    align-items: flex-end;
+  }
+}
 .dropdown__chevron-icon {
   object-fit: cover;
   transition: transform 0.3s ease-in-out;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

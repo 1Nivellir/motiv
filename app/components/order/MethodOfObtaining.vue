@@ -58,6 +58,10 @@ watch(deliveryAddress, (newValue) => {
   }
   emit('setStepMethod', 2)
 })
+
+const handleClickSwitchCity = () => {
+  cartStore.showCityDropdown = true
+}
 </script>
 
 <template>
@@ -71,9 +75,11 @@ watch(deliveryAddress, (newValue) => {
     />
     <h2 class="block-title" style="margin-bottom: 8px">Способ получения</h2>
     <p class="method-of-obtaining__text">
-      Доставим в <span class="method-of-obtaining__text-city">{{
-        cartStore.getUserLocation
-      }}</span
+      Доставим в <button
+        @click="handleClickSwitchCity"
+        class="method-of-obtaining__text-city btn-reset"
+      >
+        {{ cartStore.getUserLocation }}</button
       > к 20 сентября за 258 ₽
     </p>
     <div class="method-of-obtaining__buttons">
@@ -89,10 +95,12 @@ watch(deliveryAddress, (newValue) => {
             >~сегодня, ~258 ₽
           </span>
         </div>
-        <span
-          :class="{ active: activeMethod === 'pickup' }"
-          class="method-of-obtaining__button-icon"
-        >
+        <span class="method-of-obtaining__button-icon">
+          <img
+            v-if="activeMethod === 'pickup'"
+            src="/svg/radio-button.svg"
+            alt="radio-button"
+          />
         </span>
       </button>
 
@@ -109,10 +117,12 @@ watch(deliveryAddress, (newValue) => {
           </span>
         </div>
 
-        <span
-          :class="{ active: activeMethod === 'delivery' }"
-          class="method-of-obtaining__button-icon"
-        >
+        <span class="method-of-obtaining__button-icon">
+          <img
+            v-if="activeMethod === 'delivery'"
+            src="/svg/radio-button.svg"
+            alt="radio-button"
+          />
         </span>
       </button>
     </div>
@@ -195,6 +205,13 @@ watch(deliveryAddress, (newValue) => {
 </template>
 
 <style lang="scss" scoped>
+.method-of-obtaining__text-city {
+  color: #0c78ed;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+}
 .method-of-obtaining__map-delivery {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -350,12 +367,6 @@ watch(deliveryAddress, (newValue) => {
   width: 24px;
   height: 24px;
 }
-
-.active {
-  width: 14px;
-  height: 14px;
-  outline: 6px solid #f37021;
-}
 .method-of-obtaining__button {
   border-radius: 14px;
   display: flex;
@@ -411,6 +422,10 @@ watch(deliveryAddress, (newValue) => {
   border-radius: 14px;
   background: #fff;
   padding: 32px;
+
+  @media screen and (max-width: 992px) {
+    padding: 16px;
+  }
 }
 
 .method-of-obtaining__text {

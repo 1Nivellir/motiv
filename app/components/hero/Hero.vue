@@ -1,28 +1,38 @@
 <script lang="ts" setup>
-const containerRef = ref(null)
-const slides = ref(['/img/test.mp4'])
+// @ts-nocheck
+import arrowForTippy from '@/assets/svg/arrow-for-tippy.svg?raw'
+import { useWindowSize } from '@vueuse/core'
+import { useTippy } from 'vue-tippy'
 import Button from '../common/Button.vue'
-const swiper = useSwiper(containerRef)
-const videoRef = ref<HTMLVideoElement[] | null>(null)
-const isMuted = ref(true)
-const isPlaying = ref(true)
+const { width } = useWindowSize()
+const advertisting = ref()
+const containerRef = ref(null)
+const slides = ref(['/img/test.mp4', '/img/hero_banner.png'])
 
-onMounted(() => {
-  const video = videoRef.value?.[0] as any
-  if (!video) return
-  isMuted.value = video.muted
-  isPlaying.value = !video.paused && !video.ended
-  video.addEventListener('play', () => (isPlaying.value = true))
-  video.addEventListener('pause', () => (isPlaying.value = false))
-  video.addEventListener('volumechange', () => (isMuted.value = video.muted))
-})
-const handleMute = () => {
-  const video = videoRef.value?.[0] as any
-  if (!video) return
-  const nextMuted = !video.muted
-  video.muted = nextMuted
-  isMuted.value = nextMuted
+const getContentTippy = (descr: string) => {
+  return {
+    content: descr,
+    placement: 'right-start',
+    theme: 'motiv',
+    arrow: arrowForTippy,
+    offset: [0, 20],
+    maxWidth: 420,
+    delay: [0, 100],
+    interactive: true,
+    hideOnClick: true,
+    trigger: 'click',
+  }
 }
+
+useTippy(
+  advertisting,
+  getContentTippy('Рекламодатель ООО Екатеринбург-2000 ИНН 6661079603')
+)
+
+const swiper = useSwiper(containerRef, {
+  speed: 900,
+})
+const videoRef = ref<HTMLVideoElement[] | null>(null)
 
 const handleClickForm = async () => {
   const formOrder = document.getElementById('form-order')
@@ -31,97 +41,168 @@ const handleClickForm = async () => {
   }
 }
 
-const handlePause = () => {
-  const video: any = videoRef.value?.[0] as any
-  if (!video) return
-  if (video.paused) {
-    video.play()
-    isPlaying.value = true
-  } else {
-    video.pause()
-    isPlaying.value = false
-  }
+const isVideo = (url: string) => {
+  const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi']
+  return videoExtensions.some((ext) => url.toLowerCase().endsWith(ext))
 }
 </script>
 
 <template>
-  <div class="hero">
-    <div>
-      <swiper-container ref="containerRef">
-        <swiper-slide v-for="(slide, idx) in slides" :key="idx">
-          <video
-            id="hero-video"
-            ref="videoRef"
-            :src="slide"
-            autoplay
-            :muted="isMuted"
-            playsinline
-            class="hero__video"
-          />
-        </swiper-slide>
-      </swiper-container>
-    </div>
-    <button @click="swiper.prev()" class="hero__prev btn-reset">
-      <img src="/svg/btn-prev.svg" alt="Предыдущий слайд" />
-    </button>
-    <button @click="swiper.next()" class="hero__next btn-reset">
-      <img src="/svg/btn-next.svg" alt="Следующий слайд" />
-    </button>
-
-    <div class="hero__player_actions">
-      <button @click="handlePause" class="btn-reset actions__btn">
-        <img
-          :src="isPlaying ? '/svg/pause.svg' : '/svg/play.svg'"
-          alt="pause"
-        />
-      </button>
-      <button @click="handleMute" class="btn-reset actions__btn">
-        <img
-          :src="isMuted ? '/svg/muted.svg' : '/svg/unmuted.svg'"
-          alt="muted"
-        />
-      </button>
-    </div>
-
-    <div class="advertising">
-      <img src="/svg/advertisting.svg" alt="advertisting" />
-      <span>Реклама</span>
-    </div>
-    <div class="hero__content">
+  <div>
+    <div class="hero">
       <div>
-        <h1 style="margin-bottom: 24px" class="hero__content-title">
-          Подключайся по всей России
-        </h1>
-        <span class="hero__content-subtitle"
-          >первый месяц бесплатно для новых абонентов Мотив</span
-        >
+        <swiper-container ref="containerRef">
+          <swiper-slide v-for="(slide, idx) in slides" :key="idx">
+            <video
+              v-if="isVideo(slide)"
+              id="hero-video"
+              ref="videoRef"
+              :src="slide"
+              autoplay
+              :muted="true"
+              playsinline
+              class="hero__video"
+            />
+            <img :src="slide" alt="" v-else class="img-hero" />
+            <div
+              class="hero__content"
+              :style="
+                isVideo(slide) ? { background: 'rgba(0, 0, 0, 0.4)' } : {}
+              "
+            >
+              <div>
+                <h1 style="margin-bottom: 24px" class="hero__content-title">
+                  Подключайся по всей России
+                </h1>
+                <span class="hero__content-subtitle"
+                  >первый месяц бесплатно для новых абонентов Мотив</span
+                >
+              </div>
+
+              <Button
+                @click="handleClickForm"
+                :show-img="false"
+                class="hero__content-button"
+              >
+                <span class="hero__content-button-text">
+                  Подключиться сейчас
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="24"
+                    viewBox="0 0 25 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M19.207 12.707L17.793 11.293L13.5 15.586V6H11.5V15.586L7.207 11.293L5.793 12.707L12.5 19.414L19.207 12.707Z"
+                      fill="white"
+                    /></svg
+                ></span>
+              </Button>
+            </div>
+          </swiper-slide>
+        </swiper-container>
+      </div>
+      <button
+        v-if="width > 992"
+        @click="swiper.prev()"
+        class="hero__prev btn-reset"
+      ></button>
+      <button
+        v-if="width > 992"
+        @click="swiper.next()"
+        class="hero__next btn-reset"
+      ></button>
+
+      <div class="advertising" ref="advertisting">
+        <img src="/svg/advertisting.svg" alt="advertisting" />
+        <span>Реклама</span>
       </div>
 
-      <Button
-        @click="handleClickForm"
-        :show-img="false"
-        class="hero__content-button"
-      >
-        <span class="hero__content-button-text">
-          Подключиться сейчас
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="25"
-            height="24"
-            viewBox="0 0 25 24"
-            fill="none"
-          >
-            <path
-              d="M19.207 12.707L17.793 11.293L13.5 15.586V6H11.5V15.586L7.207 11.293L5.793 12.707L12.5 19.414L19.207 12.707Z"
-              fill="white"
-            /></svg
+      <div class="slides_info">
+        <span
+          v-for="(_, idx) in slides.length"
+          :key="idx"
+          class="info_animate"
+          :class="{ active: idx === swiper.activeIndex.value }"
         ></span>
-      </Button>
+      </div>
+    </div>
+    <div class="btn-scroll-wrapper">
+      <button @click="handleClickForm" class="btn-reset btn-scrolling">
+        <img src="/svg/chevron.svg" alt="" />
+      </button>
     </div>
   </div>
 </template>
 
 <style lang="scss">
+.btn-scroll-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 15px;
+
+  & img {
+    width: 30px;
+  }
+}
+
+.btn-scrolling {
+  transform: translateY(0);
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    transform: translateY(10px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+.slides_info {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  height: 5px;
+  position: absolute;
+  top: 0;
+  z-index: 15000;
+  left: 0;
+}
+
+.info_animate {
+  position: relative;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.25);
+  display: block;
+  width: 100%;
+}
+
+.active.info_animate::before {
+  content: '';
+  position: absolute;
+  width: 1%;
+  height: 100%;
+  border-radius: 5px;
+  background: #f37021;
+  animation: fillWidth 10s ease-in-out infinite;
+}
+
+@keyframes fillWidth {
+  0% {
+    width: 1%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.img-hero {
+  width: 100%;
+  height: 100%;
+}
 .hero__content-button {
   width: 270px;
 
@@ -131,7 +212,7 @@ const handlePause = () => {
 }
 .advertising {
   position: absolute;
-  top: 20px;
+  bottom: 20px;
   left: 20px;
   z-index: 2000;
   display: flex;
@@ -198,7 +279,6 @@ const handlePause = () => {
   max-width: 665px;
   padding: 48px;
   border-radius: 20px;
-  background: rgba(0, 0, 0, 0.4);
 
   @media screen and (max-width: 992px) {
     bottom: 178px;
@@ -209,11 +289,14 @@ const handlePause = () => {
 }
 .hero__content-subtitle {
   color: #fff;
+  max-width: 480px;
+  display: block;
   font-size: clamp(17px, 4vw, 22px);
   font-style: normal;
   font-weight: 500;
   line-height: 120%; /* 26.4px */
 }
+
 .hero__content-title {
   color: #fff;
   font-family: Montserrat;
@@ -233,14 +316,27 @@ const handlePause = () => {
   left: 0;
   z-index: 1000;
   width: 96px;
-  height: 96px;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transform: translateY(-50%);
+  opacity: 0.25;
+  background-image: url('/svg/btn-prev.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 28px 45px;
+  transition: opacity 0.3s ease-in-out, background-color 0.3s ease;
 }
+.hero__prev:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 1;
 
+  & img {
+    color: #fff;
+  }
+}
 .hero__next {
   display: flex;
   align-items: center;
@@ -249,9 +345,20 @@ const handlePause = () => {
   top: 50%;
   z-index: 1000;
   width: 96px;
-  height: 96px;
+  height: 100%;
   right: 0;
   transform: translateY(-50%);
+  background-image: url('/svg/btn-next.svg');
+  opacity: 0.25;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 28px 45px;
+  transition: opacity 0.3s ease-in-out, background-color 0.3s ease;
+}
+
+.hero__next:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 1;
 }
 
 swiper-slide {

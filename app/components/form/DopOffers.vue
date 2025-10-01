@@ -85,6 +85,7 @@ button {
 }
 
 .SwitchRoot {
+  cursor: pointer;
   width: 54px;
   height: 32px;
   border-radius: 12px;
@@ -98,6 +99,7 @@ button {
 }
 
 .SwitchThumb {
+  cursor: pointer;
   display: block;
   width: 26px;
   height: 26px;

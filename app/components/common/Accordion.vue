@@ -55,7 +55,10 @@ const accordionItems = [
           <AccordionHeader class="AccordionHeader">
             <AccordionTrigger class="AccordionTrigger">
               <span class="accordion__title-text">{{ item.title }}</span>
-              <span class="AccordionChevron" aria-label="Expand/Collapse" />
+              <button
+                class="AccordionChevron btn-reset"
+                aria-label="Expand/Collapse"
+              />
             </AccordionTrigger>
           </AccordionHeader>
           <AccordionContent class="AccordionContent">
@@ -71,7 +74,7 @@ const accordionItems = [
 
 <style lang="scss" scoped>
 .accordion__title {
-  margin-bottom: 32px;
+  margin-bottom: 15px;
   display: block;
   color: #000;
   font-size: 32px;
@@ -91,7 +94,7 @@ h3 {
 }
 
 .AccordionItem {
-  padding: 32px 0;
+  padding: 24px 0;
   border-bottom: 1px solid #e2e2e2;
   overflow: hidden;
   margin-top: 1px;
@@ -115,9 +118,13 @@ h3 {
 
 .AccordionHeader {
   display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 .AccordionTrigger {
+  width: 100%;
   font-family: inherit;
   background-color: transparent;
   padding: 0;
@@ -127,8 +134,13 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   font-size: 15px;
   line-height: 1;
+
+  @media screen and (max-width: 760px) {
+    padding-right: 0;
+  }
 }
 
 .AccordionContent {
@@ -145,7 +157,7 @@ h3 {
 .AccordionContentText {
   padding: 15px 0;
   color: #504c4d;
-  font-size: 17px;
+  font-size: clamp(13px, 4vw, 15px);
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
@@ -158,6 +170,7 @@ h3 {
   background-position: center;
   width: 36px;
   height: 36px;
+  display: flex;
   transition: background-image 0.3s ease-in-out;
 }
 .AccordionTrigger[data-state='open'] > .AccordionChevron {
@@ -183,8 +196,10 @@ h3 {
 }
 
 .accordion__title-text {
+  max-width: 90%;
+  display: flex;
   color: #000;
-  font-size: 24px;
+  font-size: clamp(18px, 4vw, 22px);
   font-style: normal;
   font-weight: 400;
   line-height: 120%;

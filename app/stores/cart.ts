@@ -3,6 +3,7 @@ import type { Cart } from '~/types/app'
 export const useCartStore = defineStore('Cart', () => {
   const _userLocation = ref('Екатеринбург')
   const _cart = ref<Cart[] | null>(null)
+  const showCityDropdown = ref(false)
   const setCart = (newData: Cart) => {
     if (_cart.value === null) {
       _cart.value = []
@@ -50,5 +51,14 @@ export const useCartStore = defineStore('Cart', () => {
   const getUserLocation = computed(() => {
     return _userLocation.value
   })
-  return {  setCart, clearCart, getCart, setUserLocation, getUserLocation, addMoreSim, deleteSim, deleteSimItem }
+  
+  return {  
+    setCart,
+    clearCart, getCart, 
+    setUserLocation, 
+    getUserLocation, 
+    addMoreSim, deleteSim, 
+    deleteSimItem, 
+    showCityDropdown 
+  }
 })

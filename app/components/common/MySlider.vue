@@ -112,6 +112,7 @@ const setIndex = (index: number) => {
 }
 
 .SliderThumb {
+  cursor: pointer;
   display: block;
   width: 44px;
   height: 44px;

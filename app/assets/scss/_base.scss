@@ -4,6 +4,42 @@ body {
 	background-color: #fff;
 }
 
+/* Tippy custom theme for form info tooltip */
+.tippy-box[data-theme~='motiv'] {
+	background-color: #000;
+	color: #fff;
+	border-radius: 14px;
+	padding: 16px 20px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.tippy-box[data-theme~='motiv'] .tippy-content {
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+/* If custom SVG arrow is provided, style it as needed */
+.tippy-box[data-theme~='motiv'] .tippy-svg-arrow svg {
+	display: block;
+	width: 16px;
+	height: 24px;
+	fill: #000;
+}
+
+/* Make arrow look like the screenshot: slightly offset and sharp */
+.tippy-box[data-theme~='motiv'] > .tippy-arrow {
+	width: 12px;
+	height: 12px;
+}
+
+.tippy-svg-arrow {
+	left: -16px;
+	top: 12px !important;
+}
+.tippy-box[data-theme~='motiv'] > .tippy-arrow:before {
+	transform: rotate(45deg);
+}
+
 .main {
 	background-color: #F7F7F7;
 }
@@ -122,7 +158,9 @@ body {
 	scrollbar-width: thin;
 	scrollbar-color: #ff7a00 #F8F9FA;
 }
-
+.tippy-box {
+	background-color: #000;
+}
 .scrollbar::-webkit-scrollbar {
 	width: 1px;
 }
