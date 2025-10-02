@@ -97,8 +97,7 @@ const handleClickNewCode = () => {
 
       <div v-else class="buyer__input-wrapper">
         <button
-          class="buyer__input-btn btn-reset"
-          style="background: #f6f5f5"
+          class="buyer__input-btn btn-reset buyer__input-btn-back"
           @click="whenChangeBack"
         >
           <svg
@@ -151,6 +150,13 @@ const handleClickNewCode = () => {
 </template>
 
 <style lang="scss" scoped>
+.buyer__input-btn.buyer__input-btn-back {
+  background: #f6f5f5;
+  transition: background 0.2s ease-in-out;
+  &:hover {
+    background: #ececec;
+  }
+}
 .btn-new-code {
   color: #0c78ed;
 }
@@ -222,6 +228,11 @@ const handleClickNewCode = () => {
     line-height: 24px; /* 171.429% */
     letter-spacing: 0.56px;
     text-transform: uppercase;
+    transition: background 0.2s ease-in-out;
+
+    &:hover {
+      background: #fe8118;
+    }
   }
 
   &__input {

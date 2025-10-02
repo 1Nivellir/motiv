@@ -291,6 +291,11 @@ const handleClickSwitchCity = () => {
   letter-spacing: 0.56px;
   width: max-content;
   text-transform: uppercase;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background: #ececec;
+  }
 
   @media screen and (max-width: 760px) {
     width: 100%;

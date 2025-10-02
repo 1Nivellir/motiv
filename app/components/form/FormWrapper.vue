@@ -182,7 +182,7 @@ const removeItemFromCart = () => {
           <button
             v-if="getShowButton"
             @click="whenClickAddCart"
-            class="price_wrapper__button btn-reset"
+            class="price_wrapper__button btn-reset price_wrapper__button-add"
           >
             в корзину
             <img
@@ -260,6 +260,12 @@ const removeItemFromCart = () => {
   line-height: 24px;
   letter-spacing: 0.52px;
   text-transform: uppercase;
+}
+
+.price_wrapper__button-add {
+  &:hover {
+    background: #fe8118;
+  }
 }
 .mp-links {
   display: grid;
@@ -343,6 +349,10 @@ const removeItemFromCart = () => {
 
       background: #f6f5f5;
       color: #000;
+
+      &:hover {
+        background: #ececec;
+      }
     }
 
     &-icon {
