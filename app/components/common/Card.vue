@@ -14,7 +14,9 @@ defineEmits<{
   <button class="card btn-reset" @click="$emit('click', title)">
     <img :src="icon" alt="card" />
     <span class="card__title">{{ title }}</span>
-    <span class="card__checked" :class="{ active: checked }"></span>
+    <span class="card__checked">
+      <img src="/svg/radio-button.svg" alt="checked" v-if="checked" />
+    </span>
   </button>
 </template>
 
@@ -41,10 +43,11 @@ defineEmits<{
   letter-spacing: -0.34px;
 }
 .card__checked {
+  display: block;
   background-color: #fff;
   border-radius: 50%;
   width: 24px;
-  display: block;
+  flex-shrink: 0;
   height: 24px;
 }
 
