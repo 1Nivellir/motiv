@@ -29,6 +29,12 @@ defineEmits<{
   align-items: center;
   gap: 8px;
   width: 100%;
+
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background: #ececec;
+  }
 }
 .card__title {
   overflow: hidden;
