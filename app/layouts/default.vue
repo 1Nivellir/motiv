@@ -7,9 +7,7 @@ import Header from '@/components/header/Header.vue'
 <template>
   <Header />
   <CityDropdown />
-  <main class="main">
-    <slot />
-  </main>
+  <slot />
   <Footer />
 </template>
 
