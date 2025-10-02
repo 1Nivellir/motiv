@@ -280,6 +280,11 @@ const removeItemFromCart = () => {
   justify-content: center;
   border: 0.7px solid #e2e2e2;
   background: #fff;
+  transition: border 0.2s ease-in-out;
+
+  &:hover {
+    border: 0.7px solid #cccccc;
+  }
 
   & img {
     width: 92px;
