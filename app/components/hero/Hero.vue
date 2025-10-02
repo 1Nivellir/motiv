@@ -204,7 +204,12 @@ const isVideo = (url: string) => {
   height: 100%;
 }
 .hero__content-button {
-  width: 270px;
+  width: max-content;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background: #fe8118;
+  }
 
   @media screen and (max-width: 992px) {
     width: 100%;
