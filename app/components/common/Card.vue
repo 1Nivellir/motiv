@@ -36,7 +36,7 @@ defineEmits<{
   text-overflow: ellipsis;
   font-size: 17px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 24px; /* 141.176% */
   letter-spacing: -0.34px;
 }

@@ -364,6 +364,7 @@ const handleClickSwitchCity = () => {
 .method-of-obtaining__button-icon {
   background-color: #fff;
   border-radius: 50%;
+  display: block;
   width: 24px;
   height: 24px;
 }

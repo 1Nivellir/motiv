@@ -336,6 +336,7 @@ const removeItemFromCart = () => {
     line-height: 24px; /* 171.429% */
     letter-spacing: 0.56px;
     text-transform: uppercase;
+    transition: background 0.2s ease-in-out;
 
     &-cart {
       outline: 1px solid #e2e2e2;
@@ -376,6 +377,11 @@ const removeItemFromCart = () => {
   display: flex;
   flex-direction: column;
   gap: 32px;
+
+  @media screen and (max-width: 992px) {
+    position: relative;
+    top: 0;
+  }
 }
 
 .dop-offers-wrapper {

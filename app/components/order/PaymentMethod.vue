@@ -7,7 +7,7 @@ const checkedPayment = ref<string>('Картой')
 
 <template>
   <div class="payment-method">
-    <h5 class="block-title">Оплаты</h5>
+    <h5 class="block-title">Оплата</h5>
     <div class="payment-method__cards">
       <Card
         v-for="payment in PAYMENTS"
@@ -22,6 +22,15 @@ const checkedPayment = ref<string>('Картой')
 </template>
 
 <style lang="scss" scoped>
+.block-title {
+  margin-bottom: 24px;
+  color: #000;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+}
+
 .payment-method {
   border-radius: 14px;
   background: #fff;
@@ -35,7 +44,7 @@ const checkedPayment = ref<string>('Картой')
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
 
-  @media screen and (max-width: 1150px) {
+  @media screen and (max-width: 1350px) {
     grid-template-columns: 1fr;
   }
 }
