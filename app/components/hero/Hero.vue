@@ -2,8 +2,9 @@
 // @ts-nocheck
 import arrowForTippy from '@/assets/svg/arrow-for-tippy.svg?raw'
 import { useWindowSize } from '@vueuse/core'
-import { useTippy } from 'vue-tippy'
 import Button from '../common/Button.vue'
+
+import { Tippy } from 'vue-tippy'
 const { width } = useWindowSize()
 const advertisting = ref()
 const containerRef = ref(null)
@@ -12,22 +13,17 @@ const slides = ref(['/img/test.mp4', '/img/hero_banner.png'])
 const getContentTippy = (descr: string) => {
   return {
     content: descr,
-    placement: 'right-start',
+    placement: width >= 992 ? 'right-start' : 'top',
     theme: 'motiv',
-    arrow: arrowForTippy,
+    arrow: width >= 992 ? arrowForTippy : undefined,
     offset: [0, 20],
-    maxWidth: 420,
+    maxWidth: width >= 992 ? 420 : 340,
     delay: [0, 100],
     interactive: true,
     hideOnClick: true,
     trigger: 'click',
   }
 }
-
-useTippy(
-  advertisting,
-  getContentTippy('Рекламодатель ООО Екатеринбург-2000 ИНН 6661079603')
-)
 
 const swiper = useSwiper(containerRef, {
   speed: 900,
@@ -114,9 +110,26 @@ const isVideo = (url: string) => {
         class="hero__next btn-reset"
       ></button>
 
-      <div class="advertising" ref="advertisting">
-        <img src="/svg/advertisting.svg" alt="advertisting" />
-        <span>Реклама</span>
+      <div class="advertising">
+        <Tippy
+          :delay="[0, 100]"
+          :offset="[0, width >= 992 ? 40 : 20]"
+          :max-width="width >= 992 ? 420 : 340"
+          theme="motiv"
+          :arrow="width >= 992 ? arrowForTippy : undefined"
+          :placement="width >= 992 ? 'right-start' : 'top'"
+          interactive
+        >
+          <div class="advertising__content">
+            <img src="/svg/advertisting.svg" alt="advertisting" />
+            <span>Реклама</span>
+          </div>
+          <template #content>
+            <span class="advertising__content-text"
+              >Рекламодатель ООО Екатеринбург-2000 ИНН 6661079603</span
+            >
+          </template>
+        </Tippy>
       </div>
 
       <div class="slides_info">
@@ -137,6 +150,14 @@ const isVideo = (url: string) => {
 </template>
 
 <style lang="scss">
+.advertising__content-text {
+  color: #fff;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  margin-bottom: 16px;
+}
 .btn-scroll-wrapper {
   width: 100%;
   display: flex;
@@ -227,6 +248,14 @@ const isVideo = (url: string) => {
   border-radius: 15px;
   background: rgba(0, 0, 0, 0.4);
   padding: 2px 12px;
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding-right: 12px;
+  }
 
   & span {
     color: #fff;

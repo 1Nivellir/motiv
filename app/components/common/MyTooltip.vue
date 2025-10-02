@@ -9,13 +9,13 @@ const { width } = useWindowSize()
   <Tippy
     :delay="[0, 100]"
     :offset="[0, 20]"
-    :max-width="420"
+    :max-width="width >= 992 ? 420 : 340"
     theme="motiv"
     :arrow="width >= 992 ? arrowForTippy : undefined"
     :placement="width >= 992 ? 'right-start' : 'top'"
     interactive
   >
-    <slot ref="someRef" />
+    <slot />
     <template #content>
       <div class="content-tippy">
         Представлены варианты наполнения, после регистрации вы можете собрать
