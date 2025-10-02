@@ -40,6 +40,19 @@ body {
 	transform: rotate(45deg);
 }
 
+@media screen and (max-width: 992px) {
+	
+	.tippy-box[data-theme~='motiv'][data-placement^='top'] > .tippy-arrow::before {
+		border-top-color: #000;
+	}
+	.tippy-box[data-theme~='motiv'][data-placement^='bottom'] > .tippy-arrow::before {
+		border-bottom-color: #000;
+	}
+
+	.tippy-box[data-theme~='motiv'] > .tippy-arrow:before {
+		transform: rotate(0);
+	}
+}
 .main {
 	background-color: #F7F7F7;
 }

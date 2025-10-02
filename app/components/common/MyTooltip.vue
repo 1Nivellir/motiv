@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import arrowForTippy from '@/assets/svg/arrow-for-tippy.svg?raw'
+import { useWindowSize } from '@vueuse/core'
 import { Tippy } from 'vue-tippy'
+const { width } = useWindowSize()
 </script>
 
 <template>
   <Tippy
-    :arrow="arrowForTippy"
-    :delay="[0, 200]"
+    :delay="[0, 100]"
     :offset="[0, 20]"
     :max-width="420"
     theme="motiv"
-    placement="right-start"
+    :arrow="width >= 992 ? arrowForTippy : undefined"
+    :placement="width >= 992 ? 'right-start' : 'top'"
     interactive
   >
     <slot ref="someRef" />
