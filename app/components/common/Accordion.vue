@@ -94,6 +94,7 @@ h3 {
 }
 
 .AccordionItem {
+  cursor: pointer;
   padding: 24px 0;
   border-bottom: 1px solid #e2e2e2;
   overflow: hidden;
@@ -124,7 +125,7 @@ h3 {
 }
 
 .AccordionTrigger {
-  width: 100%;
+  cursor: pointer;
   font-family: inherit;
   background-color: transparent;
   padding: 0;
