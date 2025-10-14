@@ -14,6 +14,7 @@ import InfoBlock from '../order/InfoBlock.vue'
 import OrderByWrapper from '../order/OrderByWrapper.vue'
 import DopOffers from './DopOffers.vue'
 import RegionDropdown from './RegionDropdown.vue'
+
 const trafficInfo = ref()
 const mobileTrafficInfo = ref()
 const { width } = useWindowSize()
@@ -117,6 +118,10 @@ const removeItemFromCart = () => {
   if (element !== -1) {
     cartStore.deleteSim(element)
   }
+}
+const getBorderForBlock = () => {
+  const showBlock = cartStore.getCart === null || cartStore.getCart.length === 0
+  return showBlock ? '0.7px solid #e2e2e2' : '0.7px solid transparent'
 }
 </script>
 
@@ -448,20 +453,17 @@ const removeItemFromCart = () => {
 .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 72px;
   align-items: start;
 
-  @media screen and (max-width: 1150px) {
-    gap: 50px;
-  }
   @media screen and (max-width: 992px) {
     flex-direction: column;
     grid-template-columns: 1fr;
-    gap: 50px;
   }
 }
 .form__left {
   position: sticky;
+  border-right: v-bind(getBorderForBlock());
+  padding-right: 72px;
   top: 20px;
   width: 100%;
   display: flex;
@@ -471,6 +473,8 @@ const removeItemFromCart = () => {
   @media screen and (max-width: 992px) {
     position: relative;
     top: 0;
+    border-right: none;
+    padding-right: 0;
   }
 }
 
