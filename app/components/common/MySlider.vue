@@ -7,6 +7,7 @@ const props = defineProps<{
   marks: number[]
   text: string
   icon?: VNode
+  isNegativeText?: string
 }>()
 
 const emit = defineEmits<{
@@ -58,7 +59,8 @@ const setIndex = (index: number) => {
         :data-active="i === (stepIndex[0] ?? 0)"
         @click="setIndex(i)"
       >
-        <span>{{ Number.isFinite(mark) ? mark : 'безлимит' }}</span>
+        <span v-if="Number.isFinite(mark)">{{ mark }}</span>
+        <span v-else style="font-size: 16px">&infin;</span>
       </li>
     </ul>
   </div>
@@ -175,10 +177,6 @@ const setIndex = (index: number) => {
   color: #8c8c8c;
   cursor: pointer;
   user-select: none;
-
-  @media screen and (max-width: 400px) {
-    font-size: 12px;
-  }
 }
 .Mark:first-child {
   margin-right: calc(100% - 80px);

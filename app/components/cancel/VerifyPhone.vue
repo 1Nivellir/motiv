@@ -64,7 +64,13 @@ onUnmounted(() => {
   <div class="wrapper_verify">
     <label class="label-input">
       <span>Код из SMS</span>
-      <input v-model="code" type="text" class="form-input" placeholder="1234" />
+      <input
+        v-model="code"
+        type="text"
+        class="form-input"
+        placeholder="1234"
+        maxlength="4"
+      />
       <p class="error-message" v-if="showErrorMessage">Не верный код</p>
       <img
         v-if="verifiedCode"

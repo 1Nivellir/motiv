@@ -18,7 +18,7 @@ const handleClickAdd = (index: number) => {
 </script>
 
 <template>
-  <div class="cart">
+  <div class="cart" id="cart">
     <div class="cart__header">
       <img src="/svg/cart-black.svg" alt="cart" />
       <h5 class="block-title">Корзина</h5>

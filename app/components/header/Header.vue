@@ -8,7 +8,7 @@ const toggleDropdown = () => {
 </script>
 
 <template>
-  <header>
+  <header class="header">
     <div class="wrapper">
       <NuxtLink to="/"> <img src="/img/logo.png" alt="logo" /></NuxtLink>
 
@@ -26,6 +26,14 @@ const toggleDropdown = () => {
 </template>
 
 <style lang="scss" scoped>
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100000;
+  background: #fff;
+}
 .city-dropdown__chevron-icon {
   @media screen and (max-width: 992px) {
     display: none;

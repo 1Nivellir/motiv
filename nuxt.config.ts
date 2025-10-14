@@ -5,6 +5,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   components: false,
   ssr: false,
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth',
+    }
+  },
   alias: {
     '@': '../app',
     '~': '../'

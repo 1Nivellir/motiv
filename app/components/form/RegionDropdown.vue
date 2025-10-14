@@ -11,6 +11,13 @@ const emit = defineEmits<{
 const handleSelect = (value: string) => {
   emit('update:modelValue', value)
   isCheckedRegion.value = value
+  toggleState.value = false
+}
+
+const hadleClickOutside = (params: MouseEvent) => {
+  if (params.currentTarget === params.target) {
+    toggleState.value = false
+  }
 }
 </script>
 <template>
@@ -36,37 +43,45 @@ const handleSelect = (value: string) => {
         области
       </span>
     </div>
-    <transition name="fade" mode="out-in">
-      <div class="dropdown__menu-background" v-if="toggleState">
-        <div class="dropdown__menu">
-          <div class="dropdown__menu-header">
-            <span class="dropdown__menu-header-title">Регион подключения </span>
-            <button class="btn-reset">
+    <teleport to="body">
+      <transition name="fade" mode="out-in">
+        <div
+          class="dropdown__menu-background"
+          v-if="toggleState"
+          @click="hadleClickOutside"
+        >
+          <div class="dropdown__menu">
+            <div class="dropdown__menu-header">
+              <span class="dropdown__menu-header-title"
+                >Регион подключения
+              </span>
+              <button class="btn-reset" @click="toggleState = false">
+                <img
+                  src="/svg/close.svg"
+                  alt="close"
+                  class="dropdown__menu-header-close"
+                />
+              </button>
+            </div>
+            <div
+              class="dropdown__menu-item"
+              v-for="region in regions"
+              :key="region"
+              @click="handleSelect(region)"
+            >
+              <span class="dropdown__menu-item-title">{{ region }}</span>
               <img
-                src="/svg/close.svg"
-                alt="close"
-                class="dropdown__menu-header-close"
+                v-if="isCheckedRegion === region"
+                src="/svg/cheked.svg"
+                alt="cheked"
+                class="dropdown__menu-item-icon"
               />
-            </button>
-          </div>
-          <div
-            class="dropdown__menu-item"
-            v-for="region in regions"
-            :key="region"
-            @click="handleSelect(region)"
-          >
-            <span class="dropdown__menu-item-title">{{ region }}</span>
-            <img
-              v-if="isCheckedRegion === region"
-              src="/svg/cheked.svg"
-              alt="cheked"
-              class="dropdown__menu-item-icon"
-            />
-            <div v-else class="dropdown__uncheked"></div>
+              <div v-else class="dropdown__uncheked"></div>
+            </div>
           </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </teleport>
   </div>
 </template>
 
@@ -92,6 +107,7 @@ const handleSelect = (value: string) => {
 .dropdown__chevron {
   width: 24px;
   height: 24px;
+  cursor: pointer;
 }
 .dropdown {
   background: #fff;
@@ -103,6 +119,7 @@ const handleSelect = (value: string) => {
   gap: 10px;
   width: 100%;
   max-width: 660px;
+  cursor: pointer;
 
   @media screen and (max-width: 992px) {
     max-width: 100%;
@@ -133,7 +150,6 @@ const handleSelect = (value: string) => {
   &__menu {
     width: 100%;
     max-width: 420px;
-    z-index: 1000;
     background: #fff;
     border-radius: 12px;
     padding: 20px 24px;
@@ -166,7 +182,7 @@ const handleSelect = (value: string) => {
     gap: 8px;
 
     @media screen and (max-width: 992px) {
-      margin-right: auto;
+      width: 100%;
     }
 
     &-title {
@@ -197,8 +213,8 @@ const handleSelect = (value: string) => {
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 1000000;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;

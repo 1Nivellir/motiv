@@ -172,6 +172,10 @@ h3 {
   height: 36px;
   display: flex;
   transition: background-image 0.3s ease-in-out;
+
+  @media screen and (max-width: 992px) {
+    flex-shrink: 0;
+  }
 }
 .AccordionTrigger[data-state='open'] > .AccordionChevron {
   background-image: url('/svg/acc-open.svg');

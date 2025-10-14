@@ -1,3 +1,4 @@
+import { useWindowSize } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import type { Cart } from '~/types/app'
 export const useCartStore = defineStore('Cart', () => {
@@ -10,7 +11,7 @@ export const useCartStore = defineStore('Cart', () => {
     }
     _cart.value?.push(newData)
   }
-
+const { width } = useWindowSize()
   const clearCart = () => {
     _cart.value = null
   }
@@ -44,7 +45,6 @@ export const useCartStore = defineStore('Cart', () => {
   })
 
   const setUserLocation = (location: string) => {
-    console.log(location)
     _userLocation.value = location
   }
 

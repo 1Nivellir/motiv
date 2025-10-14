@@ -5,8 +5,10 @@ import MySlider from '@/components/common/MySlider.vue'
 import { useCartStore } from '@/stores/cart'
 import { MINUTES_MARKS, TRAFFIC_MARKS } from '@/utils/form-data'
 import regions from '@/utils/regions'
+import { useWindowSize } from '@vueuse/core'
 import { equals } from 'ramda'
 import { useTippy } from 'vue-tippy'
+import ModileTooltip from '../common/ModileTooltip.vue'
 import MyTooltip from '../common/MyTooltip.vue'
 import InfoBlock from '../order/InfoBlock.vue'
 import OrderByWrapper from '../order/OrderByWrapper.vue'
@@ -14,7 +16,12 @@ import DopOffers from './DopOffers.vue'
 import RegionDropdown from './RegionDropdown.vue'
 const trafficInfo = ref()
 const mobileTrafficInfo = ref()
+const { width } = useWindowSize()
 
+const isShowTooltipMobile = reactive({
+  traffic: false,
+  minutes: false,
+})
 const getContentTippy = (descr: string) => {
   return {
     content: descr,
@@ -121,15 +128,42 @@ const removeItemFromCart = () => {
         <h4 class="form__left-title">
           Интернет-трафик
 
-          <MyTooltip>
+          <MyTooltip v-if="width >= 992">
             <img src="/svg/info.svg" alt="info" class="form__left-title-info" />
           </MyTooltip>
+
+          <img
+            src="/svg/info.svg"
+            alt="info"
+            @click="isShowTooltipMobile.traffic = true"
+            class="form__left-title-info"
+            v-else
+          />
+          <ModileTooltip
+            :is-show="isShowTooltipMobile.traffic"
+            @close="isShowTooltipMobile.traffic = false"
+          >
+            <div class="form__left-title-info-content">
+              <span class="form__left-title-info-text">
+                Представлены варианты наполнения, после регистрации вы можете
+                собрать свой индивидуальный тариф в мобильном приложении
+              </span>
+              <a
+                href="https://shop.motivtelecom.ru"
+                target="_blank"
+                class="link-tippy"
+                rel="noopener noreferrer"
+                >Подробнее</a
+              >
+            </div>
+          </ModileTooltip>
         </h4>
         <MySlider
           :start-index="4"
           :marks="TRAFFIC_MARKS"
           text="Гб"
           @update:model-value="whenChangeTariff"
+          is-negative-text="без интернета"
         >
           <template #icon>
             <img src="/svg/traffic.svg" alt="traffic" />
@@ -140,15 +174,43 @@ const removeItemFromCart = () => {
       <div>
         <h4 class="form__left-title">
           Звонки на номера РФ
-          <MyTooltip>
+          <MyTooltip v-if="width >= 992">
             <img src="/svg/info.svg" alt="info" class="form__left-title-info" />
           </MyTooltip>
+
+          <img
+            src="/svg/info.svg"
+            alt="info"
+            class="form__left-title-info"
+            @click="isShowTooltipMobile.minutes = true"
+            v-else
+          />
+
+          <ModileTooltip
+            :is-show="isShowTooltipMobile.minutes"
+            @close="isShowTooltipMobile.minutes = false"
+          >
+            <div class="form__left-title-info-content">
+              <span class="form__left-title-info-text">
+                Представлены варианты наполнения, после регистрации вы можете
+                собрать свой индивидуальный тариф в мобильном приложении
+              </span>
+              <a
+                href="https://shop.motivtelecom.ru"
+                target="_blank"
+                class="link-tippy"
+                rel="noopener noreferrer"
+                >Подробнее</a
+              >
+            </div>
+          </ModileTooltip>
         </h4>
         <MySlider
           :start-index="3"
           :marks="MINUTES_MARKS"
           text="минут"
           @update:model-value="whenChangeMinutes"
+          is-negative-text="без минут"
         >
           <template #icon>
             <img src="/svg/mins.svg" alt="mins" />
@@ -205,7 +267,7 @@ const removeItemFromCart = () => {
           </button>
         </div>
       </div>
-      <div class="mp-wrapper">
+      <div class="mp-wrapper" id="mp-wrapper">
         <span class="mp-text">или маркетплейсах</span>
         <div class="mp-links">
           <a
@@ -243,6 +305,19 @@ const removeItemFromCart = () => {
 </template>
 
 <style lang="scss" scoped>
+.link-tippy {
+  color: #000;
+  text-decoration: none;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+}
+.form__left-title-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 .form__left-title-info {
   position: relative;
   z-index: 2;

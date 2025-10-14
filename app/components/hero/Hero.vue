@@ -1,29 +1,18 @@
 <script lang="ts" setup>
 // @ts-nocheck
+import { useRouter } from '#imports'
 import arrowForTippy from '@/assets/svg/arrow-for-tippy.svg?raw'
 import { useWindowSize } from '@vueuse/core'
-import Button from '../common/Button.vue'
-
 import { Tippy } from 'vue-tippy'
+import Button from '../common/Button.vue'
+import ModileTooltip from '../common/ModileTooltip.vue'
+import IconDownChevron from '../icons/IconDownChevron.vue'
 const { width } = useWindowSize()
 const advertisting = ref()
 const containerRef = ref(null)
 const slides = ref(['/img/test.mp4', '/img/hero_banner.png'])
-
-const getContentTippy = (descr: string) => {
-  return {
-    content: descr,
-    placement: width >= 992 ? 'right-start' : 'top',
-    theme: 'motiv',
-    arrow: width >= 992 ? arrowForTippy : undefined,
-    offset: [0, 20],
-    maxWidth: width >= 992 ? 420 : 340,
-    delay: [0, 100],
-    interactive: true,
-    hideOnClick: true,
-    trigger: 'click',
-  }
-}
+const router = useRouter()
+const isShowTooltipMobile = ref(false)
 
 const swiper = useSwiper(containerRef, {
   speed: 900,
@@ -31,7 +20,7 @@ const swiper = useSwiper(containerRef, {
 const videoRef = ref<HTMLVideoElement[] | null>(null)
 
 const handleClickForm = async () => {
-  const formOrder = document.getElementById('form-order')
+  const formOrder = document.getElementById('btn-scroll')
   if (formOrder) {
     formOrder.scrollIntoView({ behavior: 'smooth' })
   }
@@ -41,6 +30,8 @@ const isVideo = (url: string) => {
   const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi']
   return videoExtensions.some((ext) => url.toLowerCase().endsWith(ext))
 }
+
+const body = document.body
 </script>
 
 <template>
@@ -112,13 +103,16 @@ const isVideo = (url: string) => {
 
       <div class="advertising">
         <Tippy
+          v-if="width >= 992"
           :delay="[0, 100]"
           :offset="[0, width >= 992 ? 40 : 20]"
           :max-width="width >= 992 ? 420 : 340"
           theme="motiv"
           :arrow="width >= 992 ? arrowForTippy : undefined"
           :placement="width >= 992 ? 'right-start' : 'top'"
+          :appendTo="() => body"
           interactive
+          trigger="click"
         >
           <div class="advertising__content">
             <img src="/svg/advertisting.svg" alt="advertisting" />
@@ -130,6 +124,19 @@ const isVideo = (url: string) => {
             >
           </template>
         </Tippy>
+        <div
+          class="advertising__content"
+          v-else
+          @click="isShowTooltipMobile = true"
+        >
+          <img src="/svg/advertisting.svg" alt="advertisting" />
+          <span>Реклама</span>
+          <ModileTooltip
+            :is-show="isShowTooltipMobile"
+            @close="isShowTooltipMobile = false"
+            >Рекламодатель ООО Екатеринбург-2000 ИНН 6661079603
+          </ModileTooltip>
+        </div>
       </div>
 
       <div class="slides_info">
@@ -142,8 +149,12 @@ const isVideo = (url: string) => {
       </div>
     </div>
     <div class="btn-scroll-wrapper">
-      <button @click="handleClickForm" class="btn-reset btn-scrolling">
-        <img src="/svg/chevron.svg" alt="" />
+      <button
+        @click="handleClickForm"
+        class="btn-reset btn-scrolling"
+        id="btn-scroll"
+      >
+        <IconDownChevron color="var(--primary-bg)" width="30" height="30" />
       </button>
     </div>
   </div>

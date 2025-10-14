@@ -62,6 +62,11 @@ const setActivePickup = (id: number) => {
     emit('setActivePickup', el)
   }
 }
+
+const handleClickSetActivePickup = (index: number) => {
+  emit('setActivePickup', index)
+  emit('close')
+}
 </script>
 
 <template>
@@ -130,7 +135,7 @@ const setActivePickup = (id: number) => {
                 <Button
                   :show-img="false"
                   :style="getStylesButton(item.id).styles"
-                  @click="emit('setActivePickup', index)"
+                  @click="handleClickSetActivePickup(index)"
                   style="max-width: max-content"
                   >{{ getStylesButton(item.id).text }}</Button
                 >

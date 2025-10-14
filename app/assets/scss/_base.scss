@@ -2,6 +2,7 @@ body {
 	position: relative;
 	font-family: 'Montserrat','Arial', sans-serif;
 	background-color: #fff;
+	scroll-behavior: smooth;
 }
 
 /* Tippy custom theme for form info tooltip */
@@ -55,6 +56,7 @@ body {
 }
 .main {
 	background-color: #F7F7F7;
+	margin-top: 84px;
 }
 .container {
 	margin: 0 auto;

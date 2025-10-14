@@ -41,7 +41,56 @@ const whenChangeWaitCode = () => {
   }, 1000)
 }
 
-onMounted(() => {
+// Ожидаем завершения плавной прокрутки окна (или таймаут как запасной вариант)
+const waitForScrollSettled = (timeoutMs = 1200) =>
+  new Promise<void>((resolve) => {
+    // Быстрый путь: если браузер поддерживает событие scrollend
+    const supportsScrollEnd = 'onscrollend' in window
+
+    if (supportsScrollEnd) {
+      const onEnd = () => {
+        window.removeEventListener('scrollend', onEnd as any)
+        resolve()
+      }
+      window.addEventListener('scrollend', onEnd as any, { once: true })
+      setTimeout(() => {
+        window.removeEventListener('scrollend', onEnd as any)
+        resolve()
+      }, timeoutMs)
+      return
+    }
+
+    // Фоллбек: ждём, пока scrollY стабилизируется несколько кадров подряд
+    let lastY = window.scrollY
+    let idleFrames = 0
+    const neededIdleFrames = 6
+
+    const check = () => {
+      const currentY = window.scrollY
+      if (Math.abs(currentY - lastY) < 1) {
+        idleFrames++
+        if (idleFrames >= neededIdleFrames) {
+          resolve()
+          return
+        }
+      } else {
+        idleFrames = 0
+        lastY = currentY
+      }
+      requestAnimationFrame(check)
+    }
+
+    requestAnimationFrame(check)
+    setTimeout(resolve, timeoutMs)
+  })
+
+onMounted(async () => {
+  const cart = document.getElementById('mp-wrapper')
+  if (cart) {
+    await nextTick()
+    cart.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    await waitForScrollSettled()
+  }
   phoneInput.value?.focus()
   setTimeout(() => {
     phoneInput.value?.classList.add('visible')
@@ -82,7 +131,6 @@ const handleClickNewCode = () => {
       <div class="buyer__input-wrapper" v-if="!waitCode">
         <label class="buyer__input-label">
           <input
-            autofocus
             type="text"
             class="buyer__input"
             placeholder="Телефон"
