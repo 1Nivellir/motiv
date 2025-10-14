@@ -19,10 +19,13 @@ const swiper = useSwiper(containerRef, {
 })
 const videoRef = ref<HTMLVideoElement[] | null>(null)
 
-const handleClickForm = async () => {
-  const formOrder = document.getElementById('btn-scroll')
+const handleClickForm = () => {
+  const formOrder = document.getElementById('form-order')
   if (formOrder) {
-    formOrder.scrollIntoView({ behavior: 'smooth' })
+    window.scrollTo({
+      behavior: 'smooth',
+      top: formOrder.offsetTop - 30,
+    })
   }
 }
 

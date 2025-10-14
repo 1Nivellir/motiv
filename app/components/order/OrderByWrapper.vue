@@ -19,7 +19,7 @@ const paymentMethod = () => {
 </script>
 
 <template>
-  <div class="order">
+  <div class="order" id="cart-order">
     <Cart />
     <PhoneBuyer @set-step-phone="setStepsUser" />
     <MethodOfObtaining

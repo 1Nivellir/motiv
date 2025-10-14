@@ -85,10 +85,13 @@ const waitForScrollSettled = (timeoutMs = 1200) =>
   })
 
 onMounted(async () => {
-  const cart = document.getElementById('mp-wrapper')
+  const cart = document.getElementById('cart-order')
   if (cart) {
     await nextTick()
-    cart.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    window.scrollTo({
+      behavior: 'smooth',
+      top: cart.offsetTop - 30,
+    })
     await waitForScrollSettled()
   }
   phoneInput.value?.focus()
