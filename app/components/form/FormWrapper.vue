@@ -475,6 +475,7 @@ const getBorderForBlock = () => {
     top: 0;
     border-right: none;
     padding-right: 0;
+    margin-bottom: 50px;
   }
 }
 

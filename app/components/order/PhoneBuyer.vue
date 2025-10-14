@@ -166,7 +166,7 @@ const handleClickNewCode = () => {
         </button>
         <label class="buyer__input-label">
           <input
-            type="number"
+            type="tel"
             ref="inputCode"
             @input="whenChangeVerifyCode"
             class="buyer__input buyer__input-wait-code"
@@ -174,6 +174,7 @@ const handleClickNewCode = () => {
             inputmode="numeric"
             pattern="[0-9]*"
             autofocus
+            maxlength="4"
           />
           <img
             v-if="verifiedCode"
